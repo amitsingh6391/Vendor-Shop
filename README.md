@@ -1,6 +1,8 @@
-# loginui
+# Vendorshop
 
-A new Flutter project.
+Vendor Shop is a flutter app in which u can open your online store and sell and accept order in very easy way .
+
+
 
 ## Getting Started
 
