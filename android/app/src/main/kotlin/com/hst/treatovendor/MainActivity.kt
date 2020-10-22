@@ -1,4 +1,4 @@
-package com.example.loginui
+package com.hst.treatovendor
 
 import io.flutter.embedding.android.FlutterActivity
 

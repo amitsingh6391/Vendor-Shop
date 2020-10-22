@@ -9,20 +9,20 @@ UserModel userModelFromJson(String str) => UserModel.fromJson(json.decode(str));
 String userModelToJson(UserModel data) => json.encode(data.toJson());
 
 class UserModel {
-  UserModel({
-    this.vendorUid,
-    this.result,
-    this.vendorName,
-    this.vendorMobile,
-    this.vendorEmail,
-    this.vendorType,
-    this.hotelUid,
-    this.hotelName,
-    this.hotelMobile,
-    this.hotelPhone,
-    this.hotelMail,
-    this.hotelLogo,
-  });
+  UserModel(
+      {this.vendorUid,
+      this.result,
+      this.vendorName,
+      this.vendorMobile,
+      this.vendorEmail,
+      this.vendorType,
+      this.hotelUid,
+      this.hotelName,
+      this.hotelMobile,
+      this.hotelPhone,
+      this.hotelMail,
+      this.hotelLogo,
+      this.step});
 
   String vendorUid;
   String result;
@@ -36,21 +36,22 @@ class UserModel {
   String hotelPhone;
   String hotelMail;
   String hotelLogo;
+  String step;
 
   factory UserModel.fromJson(Map<String, dynamic> json) => UserModel(
-        vendorUid: json["vendor_uid"],
-        result: json["result"],
-        vendorName: json["vendor_name"],
-        vendorMobile: json["vendor_mobile"],
-        vendorEmail: json["vendor_email"],
-        vendorType: json["vendor_type"],
-        hotelUid: json["hotel_uid"],
-        hotelName: json["hotel_name"],
-        hotelMobile: json["hotel_mobile"],
-        hotelPhone: json["hotel_phone"],
-        hotelMail: json["hotel_mail"],
-        hotelLogo: json["hotel_logo"],
-      );
+      vendorUid: json["vendor_uid"],
+      result: json["result"],
+      vendorName: json["vendor_name"],
+      vendorMobile: json["vendor_mobile"],
+      vendorEmail: json["vendor_email"],
+      vendorType: json["vendor_type"],
+      hotelUid: json["hotel_uid"],
+      hotelName: json["hotel_name"],
+      hotelMobile: json["hotel_mobile"],
+      hotelPhone: json["hotel_phone"],
+      hotelMail: json["hotel_mail"],
+      hotelLogo: json["hotel_logo"],
+      step: json["step"]);
 
   Map<String, dynamic> toJson() => {
         "vendor_uid": vendorUid,
@@ -65,5 +66,6 @@ class UserModel {
         "hotel_phone": hotelPhone,
         "hotel_mail": hotelMail,
         "hotel_logo": hotelLogo,
+        "step": step,
       };
 }

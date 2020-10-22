@@ -142,7 +142,8 @@ class _Step4State extends State<Step4> {
     setState(() {
       _time = picked;
       mondayfrom = _time.hour.toString();
-      print(_time.hour);
+      mondayfrom = mondayfrom + ":" + _time.minute.toString();
+      print(mondayfrom);
     });
   }
 
@@ -155,6 +156,7 @@ class _Step4State extends State<Step4> {
     setState(() {
       _time = picked;
       tuesdayfrom = _time.hour.toString();
+      tuesdayfrom = tuesdayfrom + ":" + _time.minute.toString();
       print(_time.hour);
     });
   }
@@ -168,6 +170,7 @@ class _Step4State extends State<Step4> {
     setState(() {
       _time = picked;
       wensdayfrom = _time.hour.toString();
+      wensdayfrom = wensdayfrom + ":" + _time.minute.toString();
       print(_time.hour);
     });
   }
@@ -181,6 +184,7 @@ class _Step4State extends State<Step4> {
     setState(() {
       _time = picked;
       thursdayfrom = _time.hour.toString();
+      thursdayfrom = thursdayfrom + ":" + _time.minute.toString();
       print(_time.hour);
     });
   }
@@ -194,6 +198,7 @@ class _Step4State extends State<Step4> {
     setState(() {
       _time = picked;
       fridayfrom = _time.hour.toString();
+      fridayfrom = fridayfrom + ":" + _time.minute.toString();
       print(_time.hour);
     });
   }
@@ -207,6 +212,7 @@ class _Step4State extends State<Step4> {
     setState(() {
       _time = picked;
       suturdayfrom = _time.hour.toString();
+      suturdayfrom = suturdayfrom + ":" + _time.minute.toString();
       print(_time.hour);
     });
   }
@@ -220,6 +226,7 @@ class _Step4State extends State<Step4> {
     setState(() {
       _time = picked;
       sundayfrom = _time.hour.toString();
+      sundayfrom = sundayfrom + ":" + _time.minute.toString();
       print(_time.hour);
     });
   }
@@ -233,6 +240,7 @@ class _Step4State extends State<Step4> {
     setState(() {
       _time = picked;
       sundayto = _time.hour.toString();
+      sundayto = sundayto + ":" + _time.minute.toString();
       print(_time.hour);
     });
   }
@@ -246,6 +254,7 @@ class _Step4State extends State<Step4> {
     setState(() {
       _time = picked;
       suturdayto = _time.hour.toString();
+      suturdayto = suturdayto + ":" + _time.minute.toString();
       print(_time.hour);
     });
   }
@@ -259,6 +268,7 @@ class _Step4State extends State<Step4> {
     setState(() {
       _time = picked;
       fridayto = _time.hour.toString();
+      fridayto = fridayto + ":" + _time.minute.toString();
       print(_time.hour);
     });
   }
@@ -272,6 +282,7 @@ class _Step4State extends State<Step4> {
     setState(() {
       _time = picked;
       wensdayto = _time.hour.toString();
+      wensdayto = wensdayto + ":" + _time.minute.toString();
       print(_time.hour);
     });
   }
@@ -285,6 +296,7 @@ class _Step4State extends State<Step4> {
     setState(() {
       _time = picked;
       thursdayto = _time.hour.toString();
+      thursdayto = thursdayto + ":" + _time.minute.toString();
       print(_time.hour);
     });
   }
@@ -298,6 +310,7 @@ class _Step4State extends State<Step4> {
     setState(() {
       _time = picked;
       tuesdayto = _time.hour.toString();
+      tuesdayto = tuesdayto + ":" + _time.minute.toString();
       print(_time.hour);
     });
   }
@@ -311,6 +324,7 @@ class _Step4State extends State<Step4> {
     setState(() {
       _time = picked;
       mondayto = _time.hour.toString();
+      mondayto = mondayto + ":" + _time.minute.toString();
       print(_time.hour);
     });
   }
@@ -376,7 +390,7 @@ class _Step4State extends State<Step4> {
                       : Text(
                           mondayfrom,
                           style: TextStyle(
-                            fontSize: 25,
+                            fontSize: 20,
                           ),
                         ),
                   SizedBox(width: 20),
@@ -387,7 +401,7 @@ class _Step4State extends State<Step4> {
                       print(_time);
                     },
                   ),
-                  Text("           --->         "),
+                  Text("        --->       "),
                   mondayto == null
                       ? Text(
                           "to",
@@ -398,7 +412,7 @@ class _Step4State extends State<Step4> {
                       : Text(
                           mondayto.toString(),
                           style: TextStyle(
-                            fontSize: 25,
+                            fontSize: 20,
                           ),
                         ),
                   SizedBox(width: 20),
@@ -428,7 +442,7 @@ class _Step4State extends State<Step4> {
                       : Text(
                           tuesdayfrom,
                           style: TextStyle(
-                            fontSize: 25,
+                            fontSize: 20,
                           ),
                         ),
                   SizedBox(width: 20),
@@ -439,7 +453,7 @@ class _Step4State extends State<Step4> {
                       print(_time);
                     },
                   ),
-                  Text("           --->         "),
+                  Text("       --->       "),
                   tuesdayto == null
                       ? Text(
                           "to",
@@ -450,7 +464,7 @@ class _Step4State extends State<Step4> {
                       : Text(
                           tuesdayto.toString(),
                           style: TextStyle(
-                            fontSize: 25,
+                            fontSize: 20,
                           ),
                         ),
                   SizedBox(width: 20),
@@ -480,7 +494,7 @@ class _Step4State extends State<Step4> {
                       : Text(
                           wensdayfrom,
                           style: TextStyle(
-                            fontSize: 25,
+                            fontSize: 20,
                           ),
                         ),
                   SizedBox(width: 20),
@@ -491,7 +505,7 @@ class _Step4State extends State<Step4> {
                       print(_time);
                     },
                   ),
-                  Text("           --->         "),
+                  Text("       --->       "),
                   wensdayto == null
                       ? Text(
                           "to",
@@ -502,7 +516,7 @@ class _Step4State extends State<Step4> {
                       : Text(
                           wensdayto.toString(),
                           style: TextStyle(
-                            fontSize: 25,
+                            fontSize: 20,
                           ),
                         ),
                   SizedBox(width: 20),
@@ -532,7 +546,7 @@ class _Step4State extends State<Step4> {
                       : Text(
                           thursdayfrom,
                           style: TextStyle(
-                            fontSize: 25,
+                            fontSize: 20,
                           ),
                         ),
                   SizedBox(width: 20),
@@ -543,7 +557,7 @@ class _Step4State extends State<Step4> {
                       print(_time);
                     },
                   ),
-                  Text("           --->         "),
+                  Text("        --->       "),
                   thursdayto == null
                       ? Text(
                           "to",
@@ -554,7 +568,7 @@ class _Step4State extends State<Step4> {
                       : Text(
                           thursdayto.toString(),
                           style: TextStyle(
-                            fontSize: 25,
+                            fontSize: 20,
                           ),
                         ),
                   SizedBox(width: 20),
@@ -584,7 +598,7 @@ class _Step4State extends State<Step4> {
                       : Text(
                           fridayfrom,
                           style: TextStyle(
-                            fontSize: 25,
+                            fontSize: 20,
                           ),
                         ),
                   SizedBox(width: 20),
@@ -595,7 +609,7 @@ class _Step4State extends State<Step4> {
                       print(_time);
                     },
                   ),
-                  Text("           --->         "),
+                  Text("       --->       "),
                   fridayto == null
                       ? Text(
                           "to",
@@ -606,7 +620,7 @@ class _Step4State extends State<Step4> {
                       : Text(
                           fridayto.toString(),
                           style: TextStyle(
-                            fontSize: 25,
+                            fontSize: 20,
                           ),
                         ),
                   SizedBox(width: 20),
@@ -636,7 +650,7 @@ class _Step4State extends State<Step4> {
                       : Text(
                           suturdayfrom,
                           style: TextStyle(
-                            fontSize: 25,
+                            fontSize: 20,
                           ),
                         ),
                   SizedBox(width: 20),
@@ -647,7 +661,7 @@ class _Step4State extends State<Step4> {
                       print(_time);
                     },
                   ),
-                  Text("           --->         "),
+                  Text("       --->      "),
                   suturdayto == null
                       ? Text(
                           "to",
@@ -658,7 +672,7 @@ class _Step4State extends State<Step4> {
                       : Text(
                           suturdayto.toString(),
                           style: TextStyle(
-                            fontSize: 25,
+                            fontSize: 20,
                           ),
                         ),
                   SizedBox(width: 20),
@@ -688,7 +702,7 @@ class _Step4State extends State<Step4> {
                       : Text(
                           sundayfrom,
                           style: TextStyle(
-                            fontSize: 25,
+                            fontSize: 20,
                           ),
                         ),
                   SizedBox(width: 20),
@@ -699,7 +713,7 @@ class _Step4State extends State<Step4> {
                       print(_time);
                     },
                   ),
-                  Text("           --->         "),
+                  Text("      --->       "),
                   sundayto == null
                       ? Text(
                           "to",
@@ -710,7 +724,7 @@ class _Step4State extends State<Step4> {
                       : Text(
                           sundayto.toString(),
                           style: TextStyle(
-                            fontSize: 25,
+                            fontSize: 20,
                           ),
                         ),
                   SizedBox(width: 20),

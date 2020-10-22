@@ -505,6 +505,35 @@ class _Step2State extends State<Step2> {
         });
   }
 
+//uploa 2 data .
+  additem() async {
+    final String apiUrl =
+        "https://food-delivery.highsofttechno.com/api/vendor/add_item/"; //can we call getitem in setstate..?
+
+    Map<String, String> map = {
+      "hotel_uid": widget.hotel_uid.toString(),
+    };
+
+    print(map);
+    var uri = Uri.parse(apiUrl);
+
+    final request = http.MultipartRequest('POST', uri)..fields.addAll(map);
+    // ..files.add(await http.MultipartFile.fromPath(
+    //     'item_image',
+    //     itemimage
+    //         .path)); //this is where you add image filepath ok it mean we are
+
+    var response = await request.send();
+    print("request");
+    print(request);
+
+    final respStr =
+        await response.stream.bytesToString(); //post image parametrs there
+    print(respStr);
+
+    return jsonDecode(respStr);
+  }
+
   uploadstep2() async {
     if (food_licence != null &&
         business_licence != null &&
@@ -514,20 +543,51 @@ class _Step2State extends State<Step2> {
       final String apiUrl =
           "https://food-delivery.highsofttechno.com/api/vendor/registration_s2/";
 
-      var map = Map<String, dynamic>();
+      var map = Map<String, String>();
       map["hotel_uid"] = widget.hotel_uid.toString();
-      map["food_licence"] = food_licence.toString();
-      map["business_licence"] = business_licence.toString();
-      map["pan_card"] = pan_card.toString();
-      map["gst_certi"] = gst_certificate.toString();
-      map["blank_cheque"] = blank_cheque.toString();
-      map["passport_photo"] = profile_pic.toString();
+      // map["food_licence"] = food_licence.toString();
+      // map["business_licence"] = business_licence.toString();
+      // map["pan_card"] = pan_card.toString();
+      // map["gst_certi"] = gst_certificate.toString();
+      // map["blank_cheque"] = blank_cheque.toString();
+      // map["passport_photo"] = profile_pic.toString();
 
-      final response = await http.post(apiUrl, body: map);
+      //final response = await http.post(apiUrl, body: map);
+
+      print(map);
+      var uri = Uri.parse(apiUrl);
+
+      final request = http.MultipartRequest('POST', uri)
+        ..fields.addAll(map)
+        ..files.add(await http.MultipartFile.fromPath(
+            'food_licence',
+            food_licence
+                .path)) //this is where you add image filepath ok it mean we are
+
+        ..files.add(await http.MultipartFile.fromPath(
+            'business_licence', business_licence.path))
+        ..files
+            .add(await http.MultipartFile.fromPath('pan_card', pan_card.path))
+        ..files.add(await http.MultipartFile.fromPath(
+            'gst_certi', gst_certificate.path))
+        ..files.add(await http.MultipartFile.fromPath(
+            'blank_cheque', blank_cheque.path))
+        ..files.add(await http.MultipartFile.fromPath(
+            'passport_photo', profile_pic.path));
+
+      var response = await request.send();
+      print("request");
+      print(request);
+
+      final respStr =
+          await response.stream.bytesToString(); //post image parametrs there
+      print(respStr);
+
+      //return jsonDecode(respStr);
 
       if (response.statusCode == 200) {
         print(widget.hotel_uid.toString());
-        print(response.body);
+        // print(response.body);
         Navigator.push(
             context,
             MaterialPageRoute(
@@ -635,9 +695,17 @@ class _Step2State extends State<Step2> {
 
   step2ok() async {
     if (formKey.currentState.validate()) {
-      Navigator.push(context, MaterialPageRoute(builder: (context) => Step3()));
+      Navigator.push(
+          context,
+          MaterialPageRoute(
+              builder: (context) => Step3(
+                    hotel_uid: widget.hotel_uid,
+                  )));
     }
-    Navigator.push(context, MaterialPageRoute(builder: (context) => Step3()));
+    Navigator.push(
+        context,
+        MaterialPageRoute(
+            builder: (context) => Step3(hotel_uid: widget.hotel_uid)));
     // uploaduserprofile();
   }
 
@@ -655,7 +723,7 @@ class _Step2State extends State<Step2> {
             padding: const EdgeInsets.all(17.0),
             child: Row(children: [
               Text(
-                "Step2 ..",
+                "Business Details ..",
                 style: TextStyle(
                   fontSize: 20,
                   // fontWeight: FontWeight.bold
@@ -668,7 +736,7 @@ class _Step2State extends State<Step2> {
           child: Padding(
             padding: const EdgeInsets.all(8.0),
             child: Text(
-              "NOTICE :  Upload your Account Details(it's  necessary to upload all documents except Gst Certificate otherwise your acount will not be save)",
+              "NOTICE :  Upload your Business Details(it's  necessary to upload all documents except Gst Certificate otherwise your acount will not be save)",
               style: TextStyle(color: Colors.black),
             ),
           ),
@@ -958,19 +1026,44 @@ class _Step3State extends State<Step3> {
       final String apiUrl =
           "https://food-delivery.highsofttechno.com/api/vendor/registration_s3/";
 
-      var map = Map<String, dynamic>();
+      var map = Map<String, String>();
       map["hotel_uid"] = widget.hotel_uid.toString();
-      map["hotel_logo"] = hotelicon.toString();
-      map["slider1"] = hotelimg1.toString();
-      map["slider2"] = hotelimg2.toString();
-      map["slider3"] = hotelimg3.toString();
+      // map["hotel_logo"] = hotelicon.toString();
+      // map["slider1"] = hotelimg1.toString();
+      // map["slider2"] = hotelimg2.toString();
+      // map["slider3"] = hotelimg3.toString();
       map["hotel_type"] = ht;
 
-      final response = await http.post(apiUrl, body: map);
+      // final response = await http.post(apiUrl, body: map);
+
+      print(map);
+      var uri = Uri.parse(apiUrl);
+
+      final request = http.MultipartRequest('POST', uri)
+        ..fields.addAll(map)
+        ..files.add(await http.MultipartFile.fromPath(
+            'hotel_logo',
+            hotelicon
+                .path)) //this is where you add image filepath ok it mean we are
+
+        ..files
+            .add(await http.MultipartFile.fromPath('slider1', hotelimg1.path))
+        ..files
+            .add(await http.MultipartFile.fromPath('slider2', hotelimg2.path))
+        ..files
+            .add(await http.MultipartFile.fromPath('slider3', hotelimg3.path));
+
+      var response = await request.send();
+      print("request");
+      print(request);
+
+      final respStr =
+          await response.stream.bytesToString(); //post image parametrs there
+      print(respStr);
 
       if (response.statusCode == 200) {
         print(widget.hotel_uid.toString());
-        print(response.body);
+        //print(response.body);
         Navigator.push(
             context,
             MaterialPageRoute(
@@ -1173,7 +1266,7 @@ class _Step3State extends State<Step3> {
                 ],
               ),
               child: Card(
-                child: hotelimg2 == null
+                child: hotelimg1 == null
                     ? Center(
                         child: Column(
                         children: [
@@ -1281,111 +1374,67 @@ class _Step3State extends State<Step3> {
             ),
           ),
         ),
-        SizedBox(height: 10),
-        RadioListTile(
-          value: 1,
-          groupValue: selectedRadioTile,
-          title: Text("Non Veg"),
-          onChanged: (val) {
-            print(" non yes");
-            setState(() {
-              ht = "Non veg";
-            });
-            setSelectedRadioTile(val);
-          },
-          activeColor: Colors.blue,
-          selected: false,
+        SizedBox(height: 1),
+        Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Container(
+              decoration: BoxDecoration(
+                color: Colors.white,
+                boxShadow: [
+                  BoxShadow(
+                      color: Colors.grey.withOpacity(0.5),
+                      spreadRadius: 5,
+                      blurRadius: 7,
+                      offset: Offset(0, 3))
+                ],
+              ),
+              child: Column(
+                children: [
+                  RadioListTile(
+                    value: 1,
+                    groupValue: selectedRadioTile,
+                    title: Text("Non Veg"),
+                    onChanged: (val) {
+                      print(" non yes");
+                      setState(() {
+                        ht = "Non veg";
+                      });
+                      setSelectedRadioTile(val);
+                    },
+                    activeColor: Colors.blue,
+                    selected: false,
+                  ),
+                  RadioListTile(
+                    value: 2,
+                    groupValue: selectedRadioTile,
+                    title: Text("Veg"),
+                    onChanged: (val) {
+                      print("yes veg");
+                      setState(() {
+                        ht = "Veg";
+                      });
+                      setSelectedRadioTile(val);
+                    },
+                    activeColor: Colors.blue,
+                    selected: false,
+                  ),
+                  RadioListTile(
+                    value: 3,
+                    groupValue: selectedRadioTile,
+                    title: Text("Both"),
+                    onChanged: (val) {
+                      setState(() {
+                        ht = "Both";
+                      });
+                      print("yesboth");
+                      setSelectedRadioTile(val);
+                    },
+                    activeColor: Colors.blue,
+                    selected: false,
+                  ),
+                ],
+              )),
         ),
-        RadioListTile(
-          value: 2,
-          groupValue: selectedRadioTile,
-          title: Text("Veg"),
-          onChanged: (val) {
-            print("yes veg");
-            setState(() {
-              ht = "Veg";
-            });
-            setSelectedRadioTile(val);
-          },
-          activeColor: Colors.blue,
-          selected: false,
-        ),
-        RadioListTile(
-          value: 3,
-          groupValue: selectedRadioTile,
-          title: Text("Both"),
-          onChanged: (val) {
-            setState(() {
-              ht = "Both";
-            });
-            print("yesboth");
-            setSelectedRadioTile(val);
-          },
-          activeColor: Colors.blue,
-          selected: false,
-        ),
-        // SizedBox(height: 10),
-        // Align(
-        //   alignment: Alignment.topLeft,
-        //   child: Padding(
-        //     padding: const EdgeInsets.all(8.0),
-        //     child: Text("Select  one option"),
-        //   ),
-        // ),
-        // Column(
-        //   children: [
-        //     Padding(
-        //       padding: const EdgeInsets.all(20.0),
-        //       child: CheckboxListTile(
-        //         title: Text("Non-Veg",
-        //             style: TextStyle(
-        //               color: Color(0xFF8d0101),
-        //             )),
-        //         value: nononveg,
-        //         onChanged: (yesnonveg) {
-        //           setState(() {
-        //             nononveg = yesnonveg;
-        //             hoteltype = "Non-Veg";
-        //           });
-        //         },
-        //       ),
-        //     ),
-        //     Padding(
-        //       padding: const EdgeInsets.all(20.0),
-        //       child: CheckboxListTile(
-        //         title: Text("Veg",
-        //             style: TextStyle(
-        //               color: Color(0xFF8d0101),
-        //             )),
-        //         value: noveg,
-        //         onChanged: (yesvage) {
-        //           setState(() {
-        //             noveg = yesvage;
-        //             hoteltype = "Veg";
-        //           });
-        //         },
-        //       ),
-        //     ),
-        //     Padding(
-        //       padding: const EdgeInsets.all(20.0),
-        //       child: CheckboxListTile(
-        //         checkColor: Colors.red,
-        //         //activeColor: Colors.white,
-        //         title: Text("Both",
-        //             style: TextStyle(
-        //               color: Color(0xFF8d0101),
-        //             )),
-        //         value: noboth,
-        //         onChanged: (yesboth) {
-        //           setState(() {
-        //             noboth = yesboth;
-        //             hoteltype = "Both";
-        //           });
-        //         },
-        //       ),
-        //     )
-        //   ],
-        // ),
         com ? CircularProgressIndicator() : Text(""),
         GestureDetector(
           onTap: () {

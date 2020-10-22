@@ -114,53 +114,57 @@ class _Step5State extends State<Step5> {
                             fontWeight: FontWeight.bold,
                             color: Color(0xFF8d0101))),
                   ),
-                  SizedBox(height: 20),
-                  Container(
-                      child: Column(children: [
-                    TextFormField(
-                      controller: account_no,
-                      decoration: InputDecoration(
-                        hintText: "    Account Number",
+                  //SizedBox(height: 10),
+                  Padding(
+                    padding: const EdgeInsets.all(15.0),
+                    child: Container(
+                        child: Column(children: [
+                      TextFormField(
+                        controller: account_no,
+                        decoration: InputDecoration(
+                          hintText: "    Account Number",
+                        ),
+                        validator: (val) {
+                          return val.length > 9
+                              ? null
+                              : "Enter Correct Account number";
+                        },
                       ),
-                      validator: (val) {
-                        return val.length > 9
-                            ? null
-                            : "Enter Correct Account number";
-                      },
-                    ),
-                    SizedBox(height: 20),
-                    TextFormField(
-                      controller: ifsc_code,
-                      decoration: InputDecoration(hintText: "     IFSC Code"),
-                      validator: (val) {
-                        return val.length > 3
-                            ? null
-                            : "Enter Correct IFSC code";
-                      },
-                    ),
-                    SizedBox(height: 20),
-                    TextFormField(
-                      controller: bank_name,
-                      decoration: InputDecoration(hintText: "      BANK NAME"),
-                      validator: (val) {
-                        return val.length > 2
-                            ? null
-                            : "Enter Correct Bank Name";
-                      },
-                    ),
-                    SizedBox(height: 20),
-                    TextFormField(
-                      controller: bensificry_name,
-                      decoration:
-                          InputDecoration(hintText: "      Beneficiary name"),
-                      validator: (val) {
-                        return val.length > 4
-                            ? null
-                            : "Enter Correct beneficiary name";
-                      },
-                    ),
-                    SizedBox(height: 20),
-                  ])),
+                      SizedBox(height: 20),
+                      TextFormField(
+                        controller: ifsc_code,
+                        decoration: InputDecoration(hintText: "     IFSC Code"),
+                        validator: (val) {
+                          return val.length > 3
+                              ? null
+                              : "Enter Correct IFSC code";
+                        },
+                      ),
+                      SizedBox(height: 20),
+                      TextFormField(
+                        controller: bank_name,
+                        decoration:
+                            InputDecoration(hintText: "      BANK NAME"),
+                        validator: (val) {
+                          return val.length > 2
+                              ? null
+                              : "Enter Correct Bank Name";
+                        },
+                      ),
+                      SizedBox(height: 20),
+                      TextFormField(
+                        controller: bensificry_name,
+                        decoration:
+                            InputDecoration(hintText: "      Beneficiary name"),
+                        validator: (val) {
+                          return val.length > 4
+                              ? null
+                              : "Enter Correct beneficiary name";
+                        },
+                      ),
+                      SizedBox(height: 20),
+                    ])),
+                  ),
                   Text("ACCOUNT TYPE",
                       style: TextStyle(
                           fontSize: 15,
@@ -179,7 +183,7 @@ class _Step5State extends State<Step5> {
                       setSelectedRadioTile(val);
                     },
                     activeColor: Colors.blue,
-                    selected: true,
+                    selected: false,
                   ),
                   RadioListTile(
                     value: 2,

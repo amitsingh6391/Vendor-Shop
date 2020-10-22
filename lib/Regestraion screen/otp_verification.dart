@@ -1,8 +1,11 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import "package:http/http.dart" as http;
+import 'package:loginui/Regestraion%20screen/payment.dart';
 import 'package:loginui/Regestraion%20screen/step123screen.dart';
+import 'package:razorpay_flutter/razorpay_flutter.dart';
 
 class OtpVerification extends StatefulWidget {
   String vendor_mobile,
@@ -32,39 +35,128 @@ class OtpVerification extends StatefulWidget {
 
 class _OtpVerificationState extends State<OtpVerification> {
   TextEditingController otpcontroller = TextEditingController();
+  Razorpay razorpay;
+  var payment_amt;
+  var trans_id;
+  bool pay = false;
+  @override
+  void initState() {
+    super.initState();
+
+    razorpay = new Razorpay();
+
+    razorpay.on(Razorpay.EVENT_PAYMENT_SUCCESS, handlerPaymentSuccess);
+    razorpay.on(Razorpay.EVENT_PAYMENT_ERROR, handlerErrorFailure);
+    razorpay.on(Razorpay.EVENT_EXTERNAL_WALLET, handlerExternalWallet);
+  }
+
+  @override
+  void dispose() {
+// TODO: implement dispose
+    super.dispose();
+    razorpay.clear();
+  }
+
+  void openCheckout() {
+    var options = {
+      "key": "rzp_live_EUApQviWeUxdLm",
+      "amount": 500 * 100,
+      "description": "Treato",
+      "prefill": {
+        "contact": widget.vendor_mobile,
+        "email": widget.vendor_email
+      },
+      "external": {
+        "wallets": ["paytm"]
+      }
+    };
+
+    try {
+      razorpay.open(options);
+    } catch (e) {
+      print(e.toString());
+    }
+  }
+
+  void handlerPaymentSuccess(PaymentSuccessResponse response) {
+    Fluttertoast.showToast(
+        msg: " Ammount added successfully . " + response.paymentId);
+
+    print("Pamyent successful");
+
+    setState(() {
+      trans_id = response.paymentId;
+      print(trans_id);
+    });
+
+    otpmatch(context);
+  }
+
+  void handlerErrorFailure(PaymentFailureResponse response) {
+    print("Payment error");
+    Fluttertoast.showToast(
+        msg: "error" + response.code.toString() + "." + response.message);
+
+    setState(() {
+      com = false;
+      pay = true;
+    });
+  }
+
+  void handlerExternalWallet(ExternalWalletResponse response) {
+    print("External Wallet");
+    Fluttertoast.showToast(msg: "External Wallet" + response.walletName);
+    setState(() {
+      com = false;
+      pay = true;
+    });
+  }
 
   otpmatch(BuildContext context) async {
-    String apiUrl =
-        "https://food-delivery.highsofttechno.com/api/vendor/otp_verify/";
+    if (otpcontroller.text != null) {
+      String apiUrl =
+          "https://food-delivery.highsofttechno.com/api/vendor/otp_verify/";
 
-    var map = Map<String, dynamic>();
-    map["vendor_name"] = widget.vendor_name;
-    map["vendor_mobile"] = widget.vendor_mobile;
-    map["vendor_password"] = widget.vendor_password;
-    map["vendor_email"] = widget.vendor_email;
-    map["hotel_name"] = widget.vendor_name;
-    map["hotel_mobile"] = widget.hotel_mobile;
-    map["hotel_phone"] = widget.hotel_phone;
-    map["hotel_email"] = widget.hotel_email;
-    map["otp"] = otpcontroller.text;
+      var map = Map<String, dynamic>();
+      map["vendor_name"] = widget.vendor_name;
+      map["vendor_mobile"] = widget.vendor_mobile;
+      map["vendor_password"] = widget.vendor_password;
+      map["vendor_email"] = widget.vendor_email;
+      map["hotel_name"] = widget.vendor_name;
+      map["hotel_mobile"] = widget.hotel_mobile;
+      map["hotel_phone"] = widget.hotel_phone;
+      map["hotel_email"] = widget.hotel_email;
+      map["otp"] = otpcontroller.text;
+      map["payment_amt"] = "500";
+      map["trans_id"] = trans_id;
+      print("yaaa");
+      print(trans_id);
+      final response = await http.post(apiUrl, body: map);
 
-    final response = await http.post(apiUrl, body: map);
+      Map data;
+      data = json.decode(response.body);
+      String x = data["result"];
+      print(data["result"]);
 
-    Map data;
-    data = json.decode(response.body);
-    String x = data["result"];
-
-    if (response.statusCode == 200 && x == "Success") {
-      String hotel_ui = data["hotel_uid"];
-      print(response.body);
-      Navigator.push(
-          context,
-          MaterialPageRoute(
-              builder: (context) => Step2(
-                    hotel_uid: hotel_ui,
-                  )));
+      if (response.statusCode == 200 && x == "Success") {
+        String hotel_ui = data["hotel_uid"];
+        print(response.body);
+        Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (context) => Step2(
+                      hotel_uid: hotel_ui,
+                    )));
+      } else {
+        setState(() {
+          com = false;
+        });
+        print("wrong");
+      }
     } else {
-      print("wrong");
+      setState(() {
+        com = false;
+      });
     }
   }
 
@@ -110,7 +202,7 @@ class _OtpVerificationState extends State<OtpVerification> {
                         Padding(
                           padding: const EdgeInsets.all(10.0),
                           child: CircleAvatar(
-                            backgroundImage: AssetImage("images/intro1.png"),
+                            backgroundImage: AssetImage("images/appicon.png"),
                             radius: 80,
                           ),
                         ),
@@ -150,8 +242,9 @@ class _OtpVerificationState extends State<OtpVerification> {
                     child: TextField(
                       keyboardType: TextInputType.number,
                       controller: otpcontroller,
+                      textAlign: TextAlign.center,
                       decoration: InputDecoration(
-                        hintText: "                 OTP",
+                        hintText: "OTP",
                         // border: InputBorder.none
                       ),
                     ),
@@ -169,20 +262,34 @@ class _OtpVerificationState extends State<OtpVerification> {
                 GestureDetector(
                   onTap: () {
                     print(widget.vendor_name);
+
                     print(widget.otp);
 
-                    setState(() {
-                      com = true;
-                    });
+                    print("hii");
 
-                    print(otpcontroller.text);
-                    if (widget.otp == int.parse(otpcontroller.text)) {
-                      otpmatch(context);
-                    } else {
+                    print(otpcontroller.text.toString());
+
+                    // setState(() {
+                    //   com = true;
+                    // });
+                    if (otpcontroller.text.length == 4) {
+                      print("hlo");
                       setState(() {
-                        com = false;
+                        com = true;
                       });
-                      showAlertDialog(context);
+
+                      print(otpcontroller.text);
+                      if (widget.otp == int.parse(otpcontroller.text)) {
+                        // otpmatch(context);
+                        openCheckout();
+                      } else {
+                        setState(() {
+                          com = false;
+                        });
+                        showAlertDialog(context);
+                      }
+                    } else {
+                      showempty(context);
                     }
                   },
                   child: Padding(
@@ -212,11 +319,49 @@ class _OtpVerificationState extends State<OtpVerification> {
                             color: Colors.blue,
                             fontWeight: FontWeight.bold),
                       )),
-                )
+                ),
+                SizedBox(height: 50),
+                pay
+                    ? Column(children: [
+                        GestureDetector(
+                            onTap: () {
+                              openCheckout();
+                            },
+                            child: Row(children: [
+                              Text("Payment Failed",
+                                  style: TextStyle(color: Colors.black)),
+                              Text(": Retry",
+                                  style: TextStyle(
+                                      color: Colors.blue, fontSize: 20)),
+                            ])),
+                      ])
+                    : Text(""),
               ],
             ))),
       ),
     );
+  }
+
+  showempty(BuildContext context) {
+    Widget okbtn = FlatButton(
+      child: Text("Retry"),
+      onPressed: () {
+        resendotp(context);
+        Navigator.pop(context);
+      },
+    );
+
+    AlertDialog alert = AlertDialog(
+      title: Text("Failed"),
+      content: Text("please inter OTP"),
+      actions: [okbtn],
+    );
+
+    showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return alert;
+        });
   }
 
   showAlertDialog(BuildContext context) {

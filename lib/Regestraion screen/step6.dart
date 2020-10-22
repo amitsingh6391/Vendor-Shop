@@ -4,6 +4,8 @@ import "package:flutter/material.dart";
 import "package:http/http.dart" as http;
 import 'package:loginui/Regestraion%20screen/step7.dart';
 
+GlobalKey catkey = GlobalKey();
+
 var id;
 
 class Step6 extends StatefulWidget {
@@ -74,6 +76,27 @@ class _Step6State extends State<Step6> {
 
   bool com = false;
 
+  showAlertDialog(BuildContext context) {
+    Widget okbtn = FlatButton(
+      child: Text("Try Again"),
+      onPressed: () {
+        Navigator.pop(context);
+      },
+    );
+
+    AlertDialog alert = AlertDialog(
+      title: Text("Failed"),
+      content: Text("Please Enter valid Category name."),
+      actions: [okbtn],
+    );
+
+    showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return alert;
+        });
+  }
+
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
@@ -124,10 +147,16 @@ class _Step6State extends State<Step6> {
                 child: RaisedButton(
                   color: Color(0xFF8d0101),
                   onPressed: () {
-                    setState(() {
-                      com = true;
-                    });
-                    addcategory();
+                    if (category.text.length > 1) {
+                      print("null hi");
+                      print(category.text);
+                      setState(() {
+                        com = true;
+                      });
+                      addcategory();
+                    } else {
+                      showAlertDialog(context);
+                    }
                   },
                   child: Text("ADD", style: TextStyle(color: Colors.white)),
                 ),

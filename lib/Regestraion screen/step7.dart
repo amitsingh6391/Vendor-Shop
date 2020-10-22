@@ -26,6 +26,27 @@ class _Step7State extends State<Step7> {
 
   bool com = false;
 
+  showAlert(BuildContext context) {
+    Widget okbtn = FlatButton(
+      child: Text("Try Again"),
+      onPressed: () {
+        Navigator.pop(context);
+      },
+    );
+
+    AlertDialog alert = AlertDialog(
+      title: Text("Failed"),
+      content: Text("Please Enter  Details of Your item."),
+      actions: [okbtn],
+    );
+
+    showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return alert;
+        });
+  }
+
   Future<void> getitemimg() async {
     // correct this image picker
     var image = await ImagePicker.pickImage(source: ImageSource.gallery);
@@ -404,11 +425,16 @@ class _Step7State extends State<Step7> {
                             child: Text("ADD"),
                             color: Color(0xFFFCCDCD),
                             onPressed: () {
-                              setState(() {
-                                com = true;
-                                additem();
-                                getitemdata();
-                              });
+                              if (price.text.length > 0 &&
+                                  item_name.text.length > 1) {
+                                setState(() {
+                                  com = true;
+                                  additem();
+                                  getitemdata();
+                                });
+                              } else {
+                                showAlert(context);
+                              }
                             },
                           )),
                         ),
@@ -416,23 +442,25 @@ class _Step7State extends State<Step7> {
                         com ? CircularProgressIndicator() : Text(""),
                         GestureDetector(
                           onTap: () {
-                            // Navigator.push(
-                            //     context,
-                            //     MaterialPageRoute(
-                            //         builder: (context) => showAlertDialog(context
-                            //             // hotel_id: widget.hotel_uid
-                            //             )));
                             showAlertDialog(context);
                           },
                           child: Align(
                             alignment: Alignment.bottomRight,
-                            child: Text(
-                              " Finish >>",
-                              style: TextStyle(
-                                  fontSize: 20,
-                                  color: Colors.green,
-                                  fontWeight: FontWeight.bold,
-                                  decoration: TextDecoration.underline),
+                            child: Container(
+                              height: 50,
+                              width: 100,
+                              color: Color(0xFF8d0101),
+                              child: Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: Text(
+                                  " Finish ",
+                                  style: TextStyle(
+                                    fontSize: 20,
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                              ),
                             ),
                           ),
                         ),

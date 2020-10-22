@@ -9,6 +9,8 @@ import 'package:flutter/services.dart';
 import "package:http/http.dart" as http;
 import 'package:intro_slider/slide_object.dart';
 import 'package:loginui/Regestraion%20screen/step123screen.dart';
+import 'package:loginui/Regestraion%20screen/step4.dart';
+import 'package:loginui/Regestraion%20screen/step5.dart';
 import 'package:loginui/pages/allorderspage.dart';
 import 'package:loginui/pages/pendingpage.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -80,10 +82,7 @@ class _SplashscreenState extends State<Splashscreen> {
           Navigator.push(
               context, MaterialPageRoute(builder: (context) => Detailpage()));
         }
-        // if (introexit == "yes") {
-        //   Navigator.push(
-        //       context, MaterialPageRoute(builder: (context) => Homepage()));
-        // }
+        
         if (email != "loggedin" && email == null) {
           Navigator.push(
               context, MaterialPageRoute(builder: (context) => IntroScreen()));
@@ -97,7 +96,7 @@ class _SplashscreenState extends State<Splashscreen> {
     Size size = MediaQuery.of(context).size;
     return Scaffold(
       // backgroundColor: Color(0xfff5a623),
-      backgroundColor: Color(0xff453167),
+      backgroundColor: Color(0xA2F50808),
       body: Container(
           height: size.height * 1,
           width: MediaQuery.of(context).size.width,
@@ -108,21 +107,21 @@ class _SplashscreenState extends State<Splashscreen> {
               Padding(
                 padding: const EdgeInsets.all(20.0),
                 child: CircleAvatar(
-                  backgroundImage: AssetImage("images/intro1.png"),
+                  backgroundImage: AssetImage("images/appicon.png"),
                   radius: size.width * .4,
                 ),
               ),
-              Text("VENDOR SHOP",
-                  style: TextStyle(
-                      fontSize: 30,
-                      color: Colors.white,
-                      fontWeight: FontWeight.bold)),
+              // Text("Treato",
+              //     style: TextStyle(
+              //         fontSize: 30,
+              //         color: Colors.white,
+              //         fontWeight: FontWeight.bold)),
               SizedBox(
                 height: size.height * 0.07,
               ),
               CircularProgressIndicator(
-                strokeWidth: 10,
-                backgroundColor: Colors.redAccent,
+                strokeWidth: 5,
+                backgroundColor: Colors.white,
               )
             ])),
           )),
@@ -135,31 +134,6 @@ class Homepage extends StatefulWidget {
   _HomepageState createState() => _HomepageState();
 }
 
-Future createUser(var loginnumber, var loginpassword) async {
-  if (loginformKey.currentState.validate()) {
-    final String apiUrl =
-        "https://food-delivery.highsofttechno.com/api/vendor/login/";
-
-    var map = Map<String, dynamic>();
-    map["text_mobile"] = loginnumber;
-    map["text_password"] = loginpassword;
-
-    final response = await http.post(apiUrl, body: map);
-    final String responseString = response.body;
-
-    if (response.statusCode == 200) {
-      final String responseString = response.body;
-
-      print(responseString);
-
-      return userModelFromJson(responseString);
-    } else {
-      print("error");
-      return null;
-    }
-  } else {}
-}
-
 class _HomepageState extends State<Homepage> {
   UserModel _userinfo;
   final TextEditingController loginnumber = TextEditingController();
@@ -168,6 +142,35 @@ class _HomepageState extends State<Homepage> {
   bool x = false;
 
   bool com = false;
+
+  Future createUser(var loginnumber, var loginpassword) async {
+    if (loginformKey.currentState.validate()) {
+      final String apiUrl =
+          "https://food-delivery.highsofttechno.com/api/vendor/login/";
+
+      var map = Map<String, dynamic>();
+      map["text_mobile"] = loginnumber;
+      map["text_password"] = loginpassword;
+
+      final response = await http.post(apiUrl, body: map);
+      final String responseString = response.body;
+
+      if (response.statusCode == 200) {
+        final String responseString = response.body;
+
+        print(responseString);
+
+        return userModelFromJson(responseString);
+      } else {
+        print("error");
+        return null;
+      }
+    } else {
+      setState(() {
+        com = false;
+      });
+    }
+  }
 
   showAlertDialog() {
     Widget okbtn = FlatButton(
@@ -290,7 +293,7 @@ class _HomepageState extends State<Homepage> {
                             ),
                             child: Column(children: [
                               SizedBox(height: size.height * 0.07),
-                              Text("VENDOR SHOP",
+                              Text("Treato",
                                   style: TextStyle(
                                       fontSize: 20,
                                       fontWeight: FontWeight.bold,
@@ -303,7 +306,7 @@ class _HomepageState extends State<Homepage> {
                           padding: const EdgeInsets.only(
                               top: 108.0, left: 20, right: 20),
                           child: Container(
-                            height: size.height * 0.7,
+                            height: size.height * 0.8,
                             width: size.width * 1,
                             decoration: BoxDecoration(
                                 color: Colors.white,
@@ -373,6 +376,7 @@ class _HomepageState extends State<Homepage> {
                                     //  SizedBox(width: 10),
                                     Expanded(
                                       child: TextFormField(
+                                        obscureText: true,
                                         controller: loginpassword,
                                         decoration: InputDecoration(
                                             hintText:
@@ -393,6 +397,8 @@ class _HomepageState extends State<Homepage> {
                                     ),
                                   ]),
                                 ),
+
+                                com ? CircularProgressIndicator() : Text(""),
                                 Padding(
                                   padding: const EdgeInsets.all(18.0),
                                   child: Container(
@@ -427,8 +433,11 @@ class _HomepageState extends State<Homepage> {
                                               _userinfo = user;
                                               profile = user;
 
-                                              if (_userinfo.result ==
-                                                  "Success") {
+                                              if (_userinfo.step ==
+                                                  "Completed") {
+                                                setState(() {
+                                                  com = false;
+                                                });
                                                 Navigator.push(
                                                     context,
                                                     MaterialPageRoute(
@@ -436,6 +445,58 @@ class _HomepageState extends State<Homepage> {
                                                             Detailpage(
                                                                 // hotel_id: hotel_uid,
                                                                 )));
+                                              } else if (_userinfo.step ==
+                                                  "step2") {
+                                                setState(() {
+                                                  com = false;
+                                                });
+                                                Navigator.push(
+                                                    context,
+                                                    MaterialPageRoute(
+                                                        builder: (context) =>
+                                                            Step2(
+                                                              hotel_uid:
+                                                                  hotel_uid,
+                                                            )));
+                                              } else if (_userinfo.step ==
+                                                  "step3") {
+                                                setState(() {
+                                                  com = false;
+                                                });
+                                                Navigator.push(
+                                                    context,
+                                                    MaterialPageRoute(
+                                                        builder: (context) =>
+                                                            Step3(
+                                                              hotel_uid:
+                                                                  hotel_uid,
+                                                            )));
+                                              } else if (_userinfo.step ==
+                                                  "step4") {
+                                                setState(() {
+                                                  com = false;
+                                                });
+                                                Navigator.push(
+                                                    context,
+                                                    MaterialPageRoute(
+                                                        builder: (context) =>
+                                                            Step4(
+                                                              hotel_uid:
+                                                                  hotel_uid,
+                                                            )));
+                                              } else if (_userinfo.step ==
+                                                  "step5") {
+                                                setState(() {
+                                                  com = false;
+                                                });
+                                                Navigator.push(
+                                                    context,
+                                                    MaterialPageRoute(
+                                                        builder: (context) =>
+                                                            Step5(
+                                                              hotel_uid:
+                                                                  hotel_uid,
+                                                            )));
                                               } else {
                                                 setState(() {
                                                   com = false;
@@ -524,7 +585,7 @@ class _HomepageState extends State<Homepage> {
                                                 fontWeight: FontWeight.bold),
                                           ))),
                                 ),
-                                com ? CircularProgressIndicator() : Text("")
+                                // com ? CircularProgressIndicator() : Text("")
                               ],
                             ),
                           ),
@@ -732,27 +793,6 @@ class _ProfilePageState extends State<ProfilePage> {
     });
   }
 
-  // Future logOut(BuildContext context) async {
-  //   SharedPreferences preferences = await SharedPreferences.getInstance();
-  //   //preferences.remove('email');
-  //   preferences.setString("introexit", "yes");
-
-  //   Fluttertoast.showToast(
-  //       msg: "Logout Successful",
-  //       toastLength: Toast.LENGTH_SHORT,
-  //       gravity: ToastGravity.BOTTOM,
-  //       timeInSecForIos: 1,
-  //       backgroundColor: Colors.amber,
-  //       textColor: Colors.white,
-  //       fontSize: 16.0);
-  //   Navigator.push(
-  //     context,
-  //     MaterialPageRoute(
-  //       builder: (context) => Homepage(),
-  //     ),
-  //   );
-  // }
-
   @override
   void initState() {
     super.initState();
@@ -853,7 +893,7 @@ class _ProfilePageState extends State<ProfilePage> {
                                       CircleAvatar(
                                         radius: size.width * 0.15,
                                         backgroundImage:
-                                            AssetImage("images/intro1.png"),
+                                            AssetImage("images/appicon.png"),
                                       ),
                                     ]),
                                     Padding(
@@ -1012,7 +1052,7 @@ class _ProfilePageState extends State<ProfilePage> {
                                 padding: const EdgeInsets.all(8.0),
                                 child: Text("hotel email: $hotelmail",
                                     style: TextStyle(
-                                      fontSize: 13,
+                                      fontSize: 15,
                                       //  fontWeight: FontWeight.bold
                                     )),
                               )
@@ -1094,7 +1134,7 @@ class IntroScreenState extends State<IntroScreen> {
 
     slides.add(
       new Slide(
-        title: "VENDOR SHOP",
+        title: "Treato",
         description:
             "Vendor Shop India Most loving Vendor app . Create your Account and start sell your Products now.",
         pathImage: "images/intro1.png",
