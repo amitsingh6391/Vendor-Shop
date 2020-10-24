@@ -67,8 +67,7 @@ class _Step7State extends State<Step7> {
   List all_item;
   dynamic _dropDownValue;
   getitemdata() async {
-    final String apiUrl =
-        "https://food-delivery.highsofttechno.com/api/vendor/item_list/";
+    final String apiUrl = "https://treato.co.in/api/vendor/item_list/";
 
     var map = Map<String, dynamic>(); //in this step everuthing fine
     map["hotel_uid"] = widget.hotel_uid;
@@ -103,7 +102,7 @@ class _Step7State extends State<Step7> {
     // preferences.setString('hotel_uid', widget.hotel_uid);
 
     final String apiUrl =
-        "https://food-delivery.highsofttechno.com/api/vendor/add_item/"; //can we call getitem in setstate..?
+        "https://treato.co.in/api/vendor/add_item/"; //can we call getitem in setstate..?
     // var map = Map<String, dynamic>();
     Map<String, String> map = {
       "hotel_uid": widget.hotel_uid.toString(),
@@ -144,8 +143,7 @@ class _Step7State extends State<Step7> {
   String cat = " ";
 
   allcat() async {
-    final String apiUrl =
-        "https://food-delivery.highsofttechno.com/api/vendor/category_list/";
+    final String apiUrl = "https://treato.co.in/api/vendor/category_list/";
 
     var map = Map<String, dynamic>(); //in this step everuthing fine
     map["hotel_uid"] = widget.hotel_uid;

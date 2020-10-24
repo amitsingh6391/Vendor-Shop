@@ -59,7 +59,8 @@ class _OtpVerificationState extends State<OtpVerification> {
 
   void openCheckout() {
     var options = {
-      "key": "rzp_live_EUApQviWeUxdLm",
+      // "key": "rzp_live_EUApQviWeUxdLm",
+      "key": "rzp_test_TjJecZ7MfB9igy",
       "amount": 500 * 100,
       "description": "Treato",
       "prefill": {
@@ -114,8 +115,7 @@ class _OtpVerificationState extends State<OtpVerification> {
 
   otpmatch(BuildContext context) async {
     if (otpcontroller.text != null) {
-      String apiUrl =
-          "https://food-delivery.highsofttechno.com/api/vendor/otp_verify/";
+      String apiUrl = "https://treato.co.in/api/vendor/otp_verify/";
 
       var map = Map<String, dynamic>();
       map["vendor_name"] = widget.vendor_name;
@@ -161,8 +161,7 @@ class _OtpVerificationState extends State<OtpVerification> {
   }
 
   resendotp(BuildContext context) async {
-    String apiUrl =
-        "https://food-delivery.highsofttechno.com/api/vendor/otp_resend/";
+    String apiUrl = "https://treato.co.in/api/vendor/otp_resend/";
     var map = Map<String, dynamic>();
     map["vendor_mobile"] = widget.vendor_mobile.toString();
     map["otp"] = widget.otp.toString();
@@ -280,8 +279,25 @@ class _OtpVerificationState extends State<OtpVerification> {
 
                       print(otpcontroller.text);
                       if (widget.otp == int.parse(otpcontroller.text)) {
-                        // otpmatch(context);
-                        openCheckout();
+                        setState(() {
+                          com = false;
+                        });
+                        //this is thing which we comment.
+                        // openCheckout();
+                        Navigator.pushReplacement(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => Payment(
+                                      otp: widget.otp,
+                                      vendor_email: widget.vendor_email,
+                                      vendor_mobile: widget.vendor_mobile,
+                                      vendor_name: widget.vendor_name,
+                                      hotel_name: widget.hotel_name,
+                                      hotel_email: widget.hotel_email,
+                                      hotel_phone: widget.hotel_phone,
+                                      hotel_mobile: widget.hotel_mobile,
+                                      vendor_password: widget.vendor_password,
+                                    )));
                       } else {
                         setState(() {
                           com = false;

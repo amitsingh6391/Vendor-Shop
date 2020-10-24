@@ -23,9 +23,8 @@ class _OrederPageState extends State<OrederPage> {
     var map = Map<String, dynamic>();
     map["hotel_uid"] = hotelid;
 
-    http.Response response = await http.post(
-        "https://food-delivery.highsofttechno.com/api/vendor/all_orders/",
-        body: map);
+    http.Response response = await http
+        .post("https://treato.co.in/api/vendor/all_orders/", body: map);
     transactions = json.decode(response.body);
 
     if (response.statusCode == 200) {

@@ -32,8 +32,7 @@ class _OrderdetailsState extends State<Orderdetails> {
   }
 
   orderdetails() async {
-    final String apiUrl =
-        "https://food-delivery.highsofttechno.com/api/vendor/order_details/";
+    final String apiUrl = "https://treato.co.in/api/vendor/order_details/";
 
     var map = Map<String, dynamic>();
     map["transaction_uid"] = widget.transid;
@@ -77,8 +76,7 @@ class _OrderdetailsState extends State<Orderdetails> {
   ///step 7 problem occurs
 
   orderstatus() async {
-    final String apiUrl =
-        "https://food-delivery.highsofttechno.com/api/vendor/order_confirmation/";
+    final String apiUrl = "https://treato.co.in/api/vendor/order_confirmation/";
 
     var map = Map<String, dynamic>();
     map["transaction_uid"] = widget.transid;
@@ -347,8 +345,7 @@ class _PendigndetailsState extends State<Pendigndetails> {
   ///step 7 problem occurs
 
   orderstatus() async {
-    final String apiUrl =
-        "https://food-delivery.highsofttechno.com/api/vendor/order_confirmation/";
+    final String apiUrl = "https://treato.co.in/api/vendor/order_confirmation/";
 
     var map = Map<String, dynamic>();
     map["transaction_uid"] = widget.transid;
@@ -380,8 +377,7 @@ class _PendigndetailsState extends State<Pendigndetails> {
   }
 
   orderdetails() async {
-    final String apiUrl =
-        "https://food-delivery.highsofttechno.com/api/vendor/order_details/";
+    final String apiUrl = "https://treato.co.in/api/vendor/order_details/";
 
     var map = Map<String, dynamic>();
     map["transaction_uid"] = widget.transid;

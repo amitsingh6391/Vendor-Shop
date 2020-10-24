@@ -30,8 +30,7 @@ class _Step5State extends State<Step5> {
 
   step5data() async {
     if (step5key.currentState.validate()) {
-      final String apiUrl =
-          "https://food-delivery.highsofttechno.com/api/vendor/registration_s5/";
+      final String apiUrl = "https://treato.co.in/api/vendor/registration_s5/";
 
       var map = Map<String, dynamic>();
       map["hotel_uid"] = widget.hotel_uid;

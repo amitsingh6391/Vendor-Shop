@@ -30,8 +30,7 @@ class _Step1State extends State<Step1> {
 
   singUp(BuildContext context) async {
     if (formKey.currentState.validate()) {
-      final String apiurl =
-          "https://food-delivery.highsofttechno.com/api/vendor/registration_s1/";
+      final String apiurl = "https://treato.co.in/api/vendor/registration_s1/";
       var map = Map<String, dynamic>();
 
       map["vendor_mobile"] = vendormobilenumber.text;
@@ -508,7 +507,7 @@ class _Step2State extends State<Step2> {
 //uploa 2 data .
   additem() async {
     final String apiUrl =
-        "https://food-delivery.highsofttechno.com/api/vendor/add_item/"; //can we call getitem in setstate..?
+        "https://treato.co.in/api/vendor/add_item/"; //can we call getitem in setstate..?
 
     Map<String, String> map = {
       "hotel_uid": widget.hotel_uid.toString(),
@@ -540,8 +539,7 @@ class _Step2State extends State<Step2> {
         pan_card != null &&
         blank_cheque != null &&
         profile_pic != null) {
-      final String apiUrl =
-          "https://food-delivery.highsofttechno.com/api/vendor/registration_s2/";
+      final String apiUrl = "https://treato.co.in/api/vendor/registration_s2/";
 
       var map = Map<String, String>();
       map["hotel_uid"] = widget.hotel_uid.toString();
@@ -1023,8 +1021,7 @@ class _Step3State extends State<Step3> {
         hotelimg1 != null &&
         hotelimg2 != null &&
         hotelimg3 != null) {
-      final String apiUrl =
-          "https://food-delivery.highsofttechno.com/api/vendor/registration_s3/";
+      final String apiUrl = "https://treato.co.in/api/vendor/registration_s3/";
 
       var map = Map<String, String>();
       map["hotel_uid"] = widget.hotel_uid.toString();

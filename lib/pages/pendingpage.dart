@@ -29,9 +29,8 @@ class _PendingPageState extends State<PendingPage> {
     print(hotelid);
     map["hotel_uid"] = hotelid;
 
-    http.Response response = await http.post(
-        "https://food-delivery.highsofttechno.com/api/vendor/pending_order/",
-        body: map);
+    http.Response response = await http
+        .post("https://treato.co.in/api/vendor/pending_order/", body: map);
     transactions = json.decode(response.body);
 
     if (response.statusCode == 200) {

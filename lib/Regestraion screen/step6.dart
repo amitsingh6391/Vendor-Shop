@@ -21,8 +21,7 @@ class _Step6State extends State<Step6> {
   Map item;
   List all_item;
   allcategory() async {
-    final String apiUrl =
-        "https://food-delivery.highsofttechno.com/api/vendor/category_list/";
+    final String apiUrl = "https://treato.co.in/api/vendor/category_list/";
 
     var map = Map<String, dynamic>(); //in this step everuthing fine
     map["hotel_uid"] = widget.hotel_uid;
@@ -50,8 +49,7 @@ class _Step6State extends State<Step6> {
   }
 
   addcategory() async {
-    final String apiUrl =
-        "https://food-delivery.highsofttechno.com/api/vendor/category/";
+    final String apiUrl = "https://treato.co.in/api/vendor/category/";
 
     var map = Map<String, dynamic>();
     map["hotel_uid"] = widget.hotel_uid;

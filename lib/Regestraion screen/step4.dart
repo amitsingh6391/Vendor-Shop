@@ -46,8 +46,7 @@ class _Step4State extends State<Step4> {
         fridayto != null &&
         suturdayto != null &&
         sundayto != null) {
-      String apiUrl =
-          "https://food-delivery.highsofttechno.com/api/vendor/registration_s4/";
+      String apiUrl = "https://treato.co.in/api/vendor/registration_s4/";
 
       var map = Map<String, dynamic>();
 

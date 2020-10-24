@@ -82,7 +82,7 @@ class _SplashscreenState extends State<Splashscreen> {
           Navigator.push(
               context, MaterialPageRoute(builder: (context) => Detailpage()));
         }
-        
+
         if (email != "loggedin" && email == null) {
           Navigator.push(
               context, MaterialPageRoute(builder: (context) => IntroScreen()));
@@ -111,11 +111,7 @@ class _SplashscreenState extends State<Splashscreen> {
                   radius: size.width * .4,
                 ),
               ),
-              // Text("Treato",
-              //     style: TextStyle(
-              //         fontSize: 30,
-              //         color: Colors.white,
-              //         fontWeight: FontWeight.bold)),
+              
               SizedBox(
                 height: size.height * 0.07,
               ),
@@ -145,8 +141,7 @@ class _HomepageState extends State<Homepage> {
 
   Future createUser(var loginnumber, var loginpassword) async {
     if (loginformKey.currentState.validate()) {
-      final String apiUrl =
-          "https://food-delivery.highsofttechno.com/api/vendor/login/";
+      final String apiUrl = "https://treato.co.in/api/vendor/login/";
 
       var map = Map<String, dynamic>();
       map["text_mobile"] = loginnumber;
