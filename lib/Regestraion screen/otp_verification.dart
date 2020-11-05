@@ -3,9 +3,12 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import "package:http/http.dart" as http;
+import 'package:loginui/Regestraion%20screen/addressscreen.dart';
 import 'package:loginui/Regestraion%20screen/payment.dart';
 import 'package:loginui/Regestraion%20screen/step123screen.dart';
+import 'package:loginui/constant.dart';
 import 'package:razorpay_flutter/razorpay_flutter.dart';
+import 'package:geolocator/geolocator.dart';
 
 class OtpVerification extends StatefulWidget {
   String vendor_mobile,
@@ -35,81 +38,27 @@ class OtpVerification extends StatefulWidget {
 
 class _OtpVerificationState extends State<OtpVerification> {
   TextEditingController otpcontroller = TextEditingController();
-  Razorpay razorpay;
-  var payment_amt;
-  var trans_id;
-  bool pay = false;
+
+  Position _currentPosition;
+  String _currentAddress;
+
+  final Geolocator geolocator = Geolocator();
+
+  var lat, long;
   @override
   void initState() {
     super.initState();
-
-    razorpay = new Razorpay();
-
-    razorpay.on(Razorpay.EVENT_PAYMENT_SUCCESS, handlerPaymentSuccess);
-    razorpay.on(Razorpay.EVENT_PAYMENT_ERROR, handlerErrorFailure);
-    razorpay.on(Razorpay.EVENT_EXTERNAL_WALLET, handlerExternalWallet);
+    location();
   }
 
-  @override
-  void dispose() {
-// TODO: implement dispose
-    super.dispose();
-    razorpay.clear();
-  }
+  location() async {
+    Position position = await Geolocator.getCurrentPosition(
+        desiredAccuracy: LocationAccuracy.high);
 
-  void openCheckout() {
-    var options = {
-      // "key": "rzp_live_EUApQviWeUxdLm",
-      "key": "rzp_test_TjJecZ7MfB9igy",
-      "amount": 500 * 100,
-      "description": "Treato",
-      "prefill": {
-        "contact": widget.vendor_mobile,
-        "email": widget.vendor_email
-      },
-      "external": {
-        "wallets": ["paytm"]
-      }
-    };
-
-    try {
-      razorpay.open(options);
-    } catch (e) {
-      print(e.toString());
-    }
-  }
-
-  void handlerPaymentSuccess(PaymentSuccessResponse response) {
-    Fluttertoast.showToast(
-        msg: " Ammount added successfully . " + response.paymentId);
-
-    print("Pamyent successful");
-
+    print(position.latitude);
     setState(() {
-      trans_id = response.paymentId;
-      print(trans_id);
-    });
-
-    otpmatch(context);
-  }
-
-  void handlerErrorFailure(PaymentFailureResponse response) {
-    print("Payment error");
-    Fluttertoast.showToast(
-        msg: "error" + response.code.toString() + "." + response.message);
-
-    setState(() {
-      com = false;
-      pay = true;
-    });
-  }
-
-  void handlerExternalWallet(ExternalWalletResponse response) {
-    print("External Wallet");
-    Fluttertoast.showToast(msg: "External Wallet" + response.walletName);
-    setState(() {
-      com = false;
-      pay = true;
+      lat = position.latitude;
+      long = position.longitude;
     });
   }
 
@@ -117,20 +66,34 @@ class _OtpVerificationState extends State<OtpVerification> {
     if (otpcontroller.text != null) {
       String apiUrl = "https://treato.co.in/api/vendor/otp_verify/";
 
+      print(lat.toString());
+      print(long.toString());
+      print(otpcontroller.text);
+      print(widget.hotel_name);
+      print(widget.vendor_name);
+      print(widget.vendor_email);
+      print(widget.vendor_password);
+      print(widget.vendor_mobile);
+      print(widget.hotel_mobile);
+      print(widget.hotel_phone);
+      print(widget.hotel_email);
+
       var map = Map<String, dynamic>();
       map["vendor_name"] = widget.vendor_name;
       map["vendor_mobile"] = widget.vendor_mobile;
       map["vendor_password"] = widget.vendor_password;
       map["vendor_email"] = widget.vendor_email;
-      map["hotel_name"] = widget.vendor_name;
+      map["hotel_name"] = widget.hotel_name;
       map["hotel_mobile"] = widget.hotel_mobile;
       map["hotel_phone"] = widget.hotel_phone;
       map["hotel_email"] = widget.hotel_email;
-      map["otp"] = otpcontroller.text;
-      map["payment_amt"] = "500";
-      map["trans_id"] = trans_id;
+      // map["otp"] = otpcontroller.text;
+      map["latitude"] = lat.toString();
+
+      map["longitude"] = long.toString();
+
       print("yaaa");
-      print(trans_id);
+
       final response = await http.post(apiUrl, body: map);
 
       Map data;
@@ -144,8 +107,8 @@ class _OtpVerificationState extends State<OtpVerification> {
         Navigator.push(
             context,
             MaterialPageRoute(
-                builder: (context) => Step2(
-                      hotel_uid: hotel_ui,
+                builder: (context) => Address(
+                      hotel_id: hotel_ui,
                     )));
       } else {
         setState(() {
@@ -180,23 +143,17 @@ class _OtpVerificationState extends State<OtpVerification> {
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     return Scaffold(
-      // appBar: AppBar(
-
-      // ),
-
-      // backgroundColor: Color(0xff203152),
-
+      appBar: AppBar(backgroundColor: back),
       body: SingleChildScrollView(
-        child: Container(
-            // height: size.height * 1,
-            width: size.width * 1,
-            child: Center(
-                child: Column(
-              children: [
+          child: Container(
+              // height: size.height * 1,
+              width: size.width * 1,
+              child: Center(
+                  child: Column(children: [
                 Padding(
                   padding: const EdgeInsets.only(top: 40),
                   child: Container(
-                      height: size.height * .25,
+                      height: size.height * .23,
                       child: Column(children: [
                         Padding(
                           padding: const EdgeInsets.all(10.0),
@@ -207,7 +164,7 @@ class _OtpVerificationState extends State<OtpVerification> {
                         ),
                       ])),
                 ),
-                SizedBox(height: size.height * 0.07),
+                SizedBox(height: size.height * 0.03),
                 Text(
                   "Enter OTP",
                   style: TextStyle(fontSize: 25, fontWeight: FontWeight.normal),
@@ -260,17 +217,10 @@ class _OtpVerificationState extends State<OtpVerification> {
                     : Text(""),
                 GestureDetector(
                   onTap: () {
-                    print(widget.vendor_name);
-
                     print(widget.otp);
-
-                    print("hii");
 
                     print(otpcontroller.text.toString());
 
-                    // setState(() {
-                    //   com = true;
-                    // });
                     if (otpcontroller.text.length == 4) {
                       print("hlo");
                       setState(() {
@@ -280,24 +230,9 @@ class _OtpVerificationState extends State<OtpVerification> {
                       print(otpcontroller.text);
                       if (widget.otp == int.parse(otpcontroller.text)) {
                         setState(() {
-                          com = false;
+                          com = true;
                         });
-                        //this is thing which we comment.
-                        // openCheckout();
-                        Navigator.pushReplacement(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => Payment(
-                                      otp: widget.otp,
-                                      vendor_email: widget.vendor_email,
-                                      vendor_mobile: widget.vendor_mobile,
-                                      vendor_name: widget.vendor_name,
-                                      hotel_name: widget.hotel_name,
-                                      hotel_email: widget.hotel_email,
-                                      hotel_phone: widget.hotel_phone,
-                                      hotel_mobile: widget.hotel_mobile,
-                                      vendor_password: widget.vendor_password,
-                                    )));
+                        otpmatch(context);
                       } else {
                         setState(() {
                           com = false;
@@ -312,7 +247,7 @@ class _OtpVerificationState extends State<OtpVerification> {
                     padding: const EdgeInsets.all(28.0),
                     child: CircleAvatar(
                       radius: 30,
-                      backgroundColor: Color(0xFF8d0101),
+                      backgroundColor: back,
                       child: Icon(Icons.arrow_forward),
                     ),
                   ),
@@ -336,25 +271,7 @@ class _OtpVerificationState extends State<OtpVerification> {
                             fontWeight: FontWeight.bold),
                       )),
                 ),
-                SizedBox(height: 50),
-                pay
-                    ? Column(children: [
-                        GestureDetector(
-                            onTap: () {
-                              openCheckout();
-                            },
-                            child: Row(children: [
-                              Text("Payment Failed",
-                                  style: TextStyle(color: Colors.black)),
-                              Text(": Retry",
-                                  style: TextStyle(
-                                      color: Colors.blue, fontSize: 20)),
-                            ])),
-                      ])
-                    : Text(""),
-              ],
-            ))),
-      ),
+              ])))),
     );
   }
 

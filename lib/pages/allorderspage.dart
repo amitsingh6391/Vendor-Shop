@@ -3,6 +3,7 @@ import 'dart:convert';
 import "package:flutter/material.dart";
 
 import "package:http/http.dart" as http;
+import 'package:loginui/constant.dart';
 import 'package:loginui/models/pendingordermodal.dart';
 import 'package:loginui/pages/orderdetails.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -92,7 +93,7 @@ class _OrederPageState extends State<OrederPage> {
       child: Scaffold(
         appBar: AppBar(
           title: Text("All Order's", style: TextStyle(color: Colors.white)),
-          backgroundColor: Color(0xFF8d0101),
+          backgroundColor: back,
         ),
         body: Column(
           children: [

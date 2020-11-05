@@ -1,7 +1,9 @@
 import "package:flutter/material.dart";
 import "package:http/http.dart" as http;
+import 'package:loginui/Regestraion%20screen/payment.dart';
 import 'package:loginui/Regestraion%20screen/step4.dart';
 import 'package:loginui/Regestraion%20screen/step6.dart';
+import 'package:loginui/constant.dart';
 
 final step5key = GlobalKey<FormState>();
 
@@ -47,8 +49,8 @@ class _Step5State extends State<Step5> {
         Navigator.push(
             context,
             MaterialPageRoute(
-                builder: (context) => Step6(
-                      hotel_uid: widget.hotel_uid,
+                builder: (context) => Payment(
+                    // hotel_uid: widget.hotel_uid,
                     )));
       }
     } else {
@@ -86,7 +88,7 @@ class _Step5State extends State<Step5> {
         title: Text(
           "Registration",
         ),
-        backgroundColor: Color(0xFF8d0101),
+        backgroundColor: back,
       ),
       body: SingleChildScrollView(
         child: Form(
@@ -111,7 +113,7 @@ class _Step5State extends State<Step5> {
                         style: TextStyle(
                             fontSize: 20,
                             fontWeight: FontWeight.bold,
-                            color: Color(0xFF8d0101))),
+                            color: back)),
                   ),
                   //SizedBox(height: 10),
                   Padding(
@@ -168,7 +170,7 @@ class _Step5State extends State<Step5> {
                       style: TextStyle(
                           fontSize: 15,
                           fontWeight: FontWeight.bold,
-                          color: Color(0xFF8d0101))),
+                          color: back)),
                   SizedBox(height: 10),
                   RadioListTile(
                     value: 1,
@@ -225,7 +227,7 @@ class _Step5State extends State<Step5> {
                     child: Padding(
                         padding: const EdgeInsets.all(18.0),
                         child: CircleAvatar(
-                          backgroundColor: Color(0xFF8d0101),
+                          backgroundColor: back,
                           radius: 25,
                           child: Icon(Icons.arrow_forward),
                         )),

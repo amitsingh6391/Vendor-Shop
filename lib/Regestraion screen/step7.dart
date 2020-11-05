@@ -6,6 +6,7 @@ import "package:flutter/material.dart";
 import "package:http/http.dart" as http;
 import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:loginui/constant.dart';
 import 'package:loginui/main.dart';
 import 'package:loginui/pages/pendingpage.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -14,7 +15,7 @@ import 'package:search_widget/search_widget.dart';
 class Step7 extends StatefulWidget {
   final String hotel_uid;
   var id;
-  Step7({@required this.hotel_uid, @required this.id});
+  Step7({@required this.hotel_uid, this.id});
   @override
   _Step7State createState() => _Step7State();
 }
@@ -50,6 +51,13 @@ class _Step7State extends State<Step7> {
   Future<void> getitemimg() async {
     // correct this image picker
     var image = await ImagePicker.pickImage(source: ImageSource.gallery);
+
+    cropitemimg(image);
+  }
+
+  Future<void> getitemimgfromcamera() async {
+    // correct this image picker
+    var image = await ImagePicker.pickImage(source: ImageSource.camera);
 
     cropitemimg(image);
   }
@@ -101,6 +109,8 @@ class _Step7State extends State<Step7> {
     // SharedPreferences preferences = await SharedPreferences.getInstance();
     // preferences.setString('hotel_uid', widget.hotel_uid);
 
+    print("item add");
+
     final String apiUrl =
         "https://treato.co.in/api/vendor/add_item/"; //can we call getitem in setstate..?
     // var map = Map<String, dynamic>();
@@ -109,7 +119,7 @@ class _Step7State extends State<Step7> {
       "category_uid": widget.id.toString(),
       "price": price.text.toString(),
       "item_name": item_name.text.toString(),
-      // "item_image": itemimage   //why we comment this is it not neccsessary
+      //  "item_image": itemimage   //why we comment this is it not neccsessary
     };
 
     print(map);
@@ -132,6 +142,9 @@ class _Step7State extends State<Step7> {
 
     setState(() {
       getitemdata();
+      price.text = "";
+      item_name.text = "";
+      itemimage = null;
     });
     return jsonDecode(respStr);
   }
@@ -171,7 +184,6 @@ class _Step7State extends State<Step7> {
 
   @override
   void initState() {
-    // TODO: implement initState
     print(widget.hotel_uid);
 
     allcat();
@@ -182,43 +194,12 @@ class _Step7State extends State<Step7> {
     getitemdata();
   }
 
-  showAlertDialog(BuildContext context) {
-    Widget okbtn = FlatButton(
-      child: Text("Login now"),
-      onPressed: () {
-        // Navigator.push(
-        //     context, MaterialPageRoute(builder: (context) => Homepage()));
-
-        Navigator.push(
-            context,
-            MaterialPageRoute(
-                builder: (context) => Homepage(
-                    // hotel_id: widget.hotel_uid
-                    )));
-      },
-    );
-
-    AlertDialog alert = AlertDialog(
-      title: Text("Success "),
-      content: Text(
-          "Your Account is successfully created . Please enter your vendor number & password to login in app "),
-      actions: [okbtn],
-    );
-
-    showDialog(
-        context: context,
-        builder: (BuildContext context) {
-          return alert;
-        });
-  }
-
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     return Scaffold(
         // backgroundColor: Color(0xff203152),
-        appBar: AppBar(
-            title: Text("Registration"), backgroundColor: Color(0xFF8d0101)),
+        appBar: AppBar(title: Text("Registration"), backgroundColor: back),
         body: SingleChildScrollView(
           child: Container(
               width: size.width * 1,
@@ -240,8 +221,7 @@ class _Step7State extends State<Step7> {
                           child: Center(
                             child: Text(
                               "ADD ITEM",
-                              style: TextStyle(
-                                  fontSize: 20, color: Color(0xFF8d0101)),
+                              style: TextStyle(fontSize: 20, color: back),
                             ),
                           ),
                         ),
@@ -325,12 +305,12 @@ class _Step7State extends State<Step7> {
                         Row(children: [
                           Text(
                             "Change Your category",
-                            style: TextStyle(color: Color(0xFF8d0101)),
+                            style: TextStyle(color: back),
                           ),
                           SizedBox(width: 40),
                           GestureDetector(
                             child: Icon(Icons.arrow_drop_down,
-                                size: 50, color: Color(0xFF8d0101)),
+                                size: 50, color: back),
                             onTap: () {
                               print("okk");
                               setState(() {
@@ -346,8 +326,7 @@ class _Step7State extends State<Step7> {
                         ]),
                         x == false
                             ? Container(
-                                child: Text(cat,
-                                    style: TextStyle(color: Color(0xFF8d0101))))
+                                child: Text(cat, style: TextStyle(color: back)))
                             // : Container(
                             //     child: Text(
                             //       "(select your category to add new item)",
@@ -438,30 +417,6 @@ class _Step7State extends State<Step7> {
                         ),
                         SizedBox(height: 10),
                         com ? CircularProgressIndicator() : Text(""),
-                        GestureDetector(
-                          onTap: () {
-                            showAlertDialog(context);
-                          },
-                          child: Align(
-                            alignment: Alignment.bottomRight,
-                            child: Container(
-                              height: 50,
-                              width: 100,
-                              color: Color(0xFF8d0101),
-                              child: Padding(
-                                padding: const EdgeInsets.all(8.0),
-                                child: Text(
-                                  " Finish ",
-                                  style: TextStyle(
-                                    fontSize: 20,
-                                    color: Colors.white,
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                                ),
-                              ),
-                            ),
-                          ),
-                        ),
                         SizedBox(height: 10),
                         Padding(
                           padding: const EdgeInsets.all(8.0),

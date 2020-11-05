@@ -8,10 +8,15 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import "package:http/http.dart" as http;
 import 'package:intro_slider/slide_object.dart';
+import 'package:loginui/Regestraion%20screen/contactus.dart';
 import 'package:loginui/Regestraion%20screen/step123screen.dart';
 import 'package:loginui/Regestraion%20screen/step4.dart';
 import 'package:loginui/Regestraion%20screen/step5.dart';
+import 'package:loginui/Regestraion%20screen/step6.dart';
+import 'package:loginui/Regestraion%20screen/step7.dart';
+import 'package:loginui/constant.dart';
 import 'package:loginui/pages/allorderspage.dart';
+import 'package:loginui/pages/forgotpassword.dart';
 import 'package:loginui/pages/pendingpage.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import "user_modal.dart";
@@ -20,11 +25,12 @@ import 'package:intro_slider/intro_slider.dart';
 import 'dart:io';
 import "package:flutter_offline/flutter_offline.dart";
 import 'package:connectivity/connectivity.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 bool connected;
 
-final formKey = GlobalKey<FormState>();
-final loginformKey = GlobalKey<FormState>();
+// final formKey = GlobalKey<FormState>();
+// final loginformKey = GlobalKey<FormState>();
 
 String hotel_uid;
 
@@ -95,32 +101,17 @@ class _SplashscreenState extends State<Splashscreen> {
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     return Scaffold(
-      // backgroundColor: Color(0xfff5a623),
-      backgroundColor: Color(0xA2F50808),
+      backgroundColor: back,
       body: Container(
-          height: size.height * 1,
-          width: MediaQuery.of(context).size.width,
-          child: Padding(
-            padding: const EdgeInsets.only(top: 100),
-            child: Container(
-                child: Column(children: [
-              Padding(
-                padding: const EdgeInsets.all(20.0),
-                child: CircleAvatar(
-                  backgroundImage: AssetImage("images/appicon.png"),
-                  radius: size.width * .4,
-                ),
-              ),
-              
-              SizedBox(
-                height: size.height * 0.07,
-              ),
-              CircularProgressIndicator(
-                strokeWidth: 5,
-                backgroundColor: Colors.white,
-              )
-            ])),
-          )),
+        height: size.height * 1,
+        width: MediaQuery.of(context).size.width,
+        child: Center(
+          child: CircleAvatar(
+            backgroundImage: AssetImage("images/appicon.png"),
+            radius: size.width * .4,
+          ),
+        ),
+      ),
     );
   }
 }
@@ -138,6 +129,7 @@ class _HomepageState extends State<Homepage> {
   bool x = false;
 
   bool com = false;
+  final loginformKey = GlobalKey<FormState>();
 
   Future createUser(var loginnumber, var loginpassword) async {
     if (loginformKey.currentState.validate()) {
@@ -169,7 +161,7 @@ class _HomepageState extends State<Homepage> {
 
   showAlertDialog() {
     Widget okbtn = FlatButton(
-      child: Text("Retery"),
+      child: Text("Retry"),
       onPressed: () {
         Navigator.pop(context);
       },
@@ -281,7 +273,7 @@ class _HomepageState extends State<Homepage> {
                         width: size.width * 1,
                         child: Container(
                             decoration: BoxDecoration(
-                              color: Color(0xFF8d0101),
+                              color: back,
                               borderRadius: BorderRadius.only(
                                   bottomLeft: Radius.circular(-10),
                                   bottomRight: Radius.circular(-10)),
@@ -400,7 +392,7 @@ class _HomepageState extends State<Homepage> {
                                       width:
                                           MediaQuery.of(context).size.width / 2,
                                       decoration: BoxDecoration(
-                                          color: Color(0xFF8d0101),
+                                          color: back,
                                           borderRadius:
                                               BorderRadius.circular(20)),
                                       child: FlatButton(
@@ -581,11 +573,30 @@ class _HomepageState extends State<Homepage> {
                                           ))),
                                 ),
                                 // com ? CircularProgressIndicator() : Text("")
+
+                                GestureDetector(
+                                  onTap: () {
+                                    Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                            builder: (context) =>
+                                                Forgotpassword()));
+                                  },
+                                  child: Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: Container(
+                                        alignment: Alignment.bottomRight,
+                                        child: Text("Forgot Password",
+                                            style: TextStyle(
+                                              color: back,
+                                            ))),
+                                  ),
+                                )
                               ],
                             ),
                           ),
                         ),
-                      )
+                      ),
                     ],
                   ),
                 ),
@@ -602,7 +613,7 @@ class _HomepageState extends State<Homepage> {
                         Text("Don't Have an Account:  ",
                             style: TextStyle(
                               fontSize: 15,
-                              color: Color(0xFF8d0101),
+                              color: back,
                             )),
                         GestureDetector(
                             onTap: () {
@@ -740,8 +751,8 @@ class _DetailpageState extends State<Detailpage> {
               ],
             ),
           ],
-          color: Color(0xFF8d0101),
-          buttonBackgroundColor: Color(0xFF8d0101),
+          color: back,
+          buttonBackgroundColor: back,
           backgroundColor: Colors.white,
           animationCurve: Curves.easeInOut,
           animationDuration: Duration(milliseconds: 600),
@@ -770,6 +781,7 @@ class _ProfilePageState extends State<ProfilePage> {
       hotelmobile,
       hotelphone,
       hotelmail,
+      hotelid,
       hotollogo;
 
   Future getEmail() async {
@@ -785,7 +797,20 @@ class _ProfilePageState extends State<ProfilePage> {
       hotelmail = preferences.getString('hotel_email');
       hotollogo = preferences.getString("hotel_logo");
       hotelname = preferences.getString("hotel_name");
+      hotelid = preferences.getString("hotel_uid");
     });
+  }
+
+  contact() async {
+    final Uri params = Uri(scheme: "mailto", path: "Support@treato.co.in");
+
+    String url = params.toString();
+
+    if (await canLaunch(url)) {
+      await launch(url);
+    } else {
+      throw "could not launch $url";
+    }
   }
 
   @override
@@ -831,7 +856,7 @@ class _ProfilePageState extends State<ProfilePage> {
               child: Column(
                 children: <Widget>[
                   Container(
-                    color: Color(0xFF8d0101),
+                    color: back,
                     width: size.width * 1,
                     child: Align(
                       alignment: Alignment.topCenter,
@@ -856,7 +881,7 @@ class _ProfilePageState extends State<ProfilePage> {
                           width: size.width * 1,
                           child: Container(
                             decoration: BoxDecoration(
-                              color: Color(0xFF8d0101),
+                              color: back,
                             ),
                           ),
                         ),
@@ -919,6 +944,39 @@ class _ProfilePageState extends State<ProfilePage> {
                   // SizedBox(
                   //   height: size.height * 0.,
                   // ),
+
+                  Row(children: [
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: RaisedButton(
+                          color: back,
+                          onPressed: () {
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => Step6(
+                                          hotel_uid: hotelid,
+                                        )));
+                          },
+                          child: Text("Add New Category",
+                              style: TextStyle(color: Colors.white))),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: RaisedButton(
+                          color: back,
+                          onPressed: () {
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => Step7(
+                                          hotel_uid: hotelid,
+                                        )));
+                          },
+                          child: Text("Add New Item",
+                              style: TextStyle(color: Colors.white))),
+                    )
+                  ]),
                   Container(
                       width: size.width * 1,
                       child: Column(
@@ -928,7 +986,7 @@ class _ProfilePageState extends State<ProfilePage> {
                               Padding(
                                 padding: const EdgeInsets.all(8.0),
                                 child: CircleAvatar(
-                                    backgroundColor: Color(0xFF8d0101),
+                                    backgroundColor: back,
                                     radius: 25,
                                     child: Icon(Icons.person,
                                         color: Colors.white)),
@@ -949,7 +1007,7 @@ class _ProfilePageState extends State<ProfilePage> {
                               Padding(
                                 padding: const EdgeInsets.all(8.0),
                                 child: CircleAvatar(
-                                    backgroundColor: Color(0xFF8d0101),
+                                    backgroundColor: back,
                                     radius: 25,
                                     child:
                                         Icon(Icons.hotel, color: Colors.white)),
@@ -971,7 +1029,7 @@ class _ProfilePageState extends State<ProfilePage> {
                               Padding(
                                 padding: const EdgeInsets.all(8.0),
                                 child: CircleAvatar(
-                                    backgroundColor: Color(0xFF8d0101),
+                                    backgroundColor: back,
                                     radius: 25,
                                     child:
                                         Icon(Icons.phone, color: Colors.white)),
@@ -993,7 +1051,7 @@ class _ProfilePageState extends State<ProfilePage> {
                               Padding(
                                 padding: const EdgeInsets.all(8.0),
                                 child: CircleAvatar(
-                                    backgroundColor: Color(0xFF8d0101),
+                                    backgroundColor: back,
                                     radius: 25,
                                     child: Icon(Icons.phone_android,
                                         color: Colors.white)),
@@ -1015,7 +1073,7 @@ class _ProfilePageState extends State<ProfilePage> {
                               Padding(
                                 padding: const EdgeInsets.all(8.0),
                                 child: CircleAvatar(
-                                    backgroundColor: Color(0xFF8d0101),
+                                    backgroundColor: back,
                                     radius: 25,
                                     child:
                                         Icon(Icons.phone, color: Colors.white)),
@@ -1037,7 +1095,7 @@ class _ProfilePageState extends State<ProfilePage> {
                               Padding(
                                 padding: const EdgeInsets.all(8.0),
                                 child: CircleAvatar(
-                                    backgroundColor: Color(0xFF8d0101),
+                                    backgroundColor: back,
                                     radius: 25,
                                     child: Icon(Icons.email_rounded,
                                         color: Colors.white)),
@@ -1071,7 +1129,7 @@ class _ProfilePageState extends State<ProfilePage> {
                                 Padding(
                                   padding: const EdgeInsets.all(8.0),
                                   child: CircleAvatar(
-                                      backgroundColor: Color(0xFF8d0101),
+                                      backgroundColor: back,
                                       radius: 25,
                                       child: Icon(Icons.logout,
                                           color: Colors.white)),
@@ -1080,6 +1138,36 @@ class _ProfilePageState extends State<ProfilePage> {
                                 Padding(
                                   padding: const EdgeInsets.all(8.0),
                                   child: Text("LOGOUT",
+                                      style: TextStyle(
+                                        fontSize: 15,
+                                        // fontWeight: FontWeight.bold
+                                      )),
+                                )
+                              ],
+                            ),
+                          ),
+                          GestureDetector(
+                            onTap: () async {
+                              // contact();
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => Contactus()));
+                            },
+                            child: Row(
+                              children: [
+                                Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: CircleAvatar(
+                                      backgroundColor: back,
+                                      radius: 25,
+                                      child: Icon(Icons.support_agent,
+                                          color: Colors.white)),
+                                ),
+                                SizedBox(width: size.width * 0.05),
+                                Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: Text("Contact Us",
                                       style: TextStyle(
                                         fontSize: 15,
                                         // fontWeight: FontWeight.bold

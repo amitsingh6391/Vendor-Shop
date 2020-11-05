@@ -3,6 +3,7 @@ import 'dart:convert';
 import "package:flutter/material.dart";
 
 import "package:http/http.dart" as http;
+import 'package:loginui/constant.dart';
 import 'package:loginui/models/pendingordermodal.dart';
 import 'package:loginui/pages/orderdetails.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -42,7 +43,7 @@ class _PendingPageState extends State<PendingPage> {
         print(pendingitem);
       });
 
-      //print(pendingitem[0]["transaction_uid"]);
+      print(pendingitem[0]["transaction_uid"]);
     } else {
       print("345");
     }
@@ -107,7 +108,7 @@ class _PendingPageState extends State<PendingPage> {
                 "Pending Orders",
                 style: TextStyle(color: Colors.white),
               ),
-              backgroundColor: Color(0xFF8d0101),
+              backgroundColor: back,
             ),
             body: SingleChildScrollView(
               child: Column(children: [

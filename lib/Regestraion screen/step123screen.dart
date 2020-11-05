@@ -1,5 +1,8 @@
 import 'dart:convert';
+
 import 'dart:io';
+
+import "dart:io" as Io;
 
 import "package:flutter/material.dart";
 import 'package:image_cropper/image_cropper.dart';
@@ -8,9 +11,11 @@ import 'package:image_picker/image_picker.dart';
 import "package:http/http.dart" as http;
 import 'package:loginui/Regestraion%20screen/otp_verification.dart';
 import 'package:loginui/Regestraion%20screen/step4.dart';
+import 'package:loginui/constant.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
-final formKey = GlobalKey<FormState>();
-final step2key = GlobalKey<FormState>();
+// final formKey = GlobalKey<FormState>();
+// final step2key = GlobalKey<FormState>();
 
 class Step1 extends StatefulWidget {
   @override
@@ -27,9 +32,13 @@ class _Step1State extends State<Step1> {
   TextEditingController hotelmobilenumber = new TextEditingController();
   TextEditingController hotelemail = new TextEditingController();
   TextEditingController hotelphonenumber = new TextEditingController();
+  final formKey = GlobalKey<FormState>();
 
   singUp(BuildContext context) async {
     if (formKey.currentState.validate()) {
+      SharedPreferences preferences = await SharedPreferences.getInstance();
+      preferences.setString('paymentemail', vendoremail.text);
+      preferences.setString('paymentnumber', vendormobilenumber.text);
       final String apiurl = "https://treato.co.in/api/vendor/registration_s1/";
       var map = Map<String, dynamic>();
 
@@ -46,7 +55,9 @@ class _Step1State extends State<Step1> {
 
       if (response.statusCode == 200 && x == "Success") {
         print(response.body);
-
+        setState(() {
+          com = false;
+        });
         Navigator.push(
             context,
             MaterialPageRoute(
@@ -104,7 +115,7 @@ class _Step1State extends State<Step1> {
       // backgroundColor: Color(0xff203152),
       appBar: AppBar(
         title: Text("Registration"),
-        backgroundColor: Color(0xFF8d0101),
+        backgroundColor: back,
       ),
       body: SingleChildScrollView(
         child: Container(
@@ -451,7 +462,7 @@ class _Step1State extends State<Step1> {
                   padding: const EdgeInsets.all(28.0),
                   child: CircleAvatar(
                     radius: 30,
-                    backgroundColor: Colors.red,
+                    backgroundColor: back,
                     child: Icon(Icons.arrow_forward),
                   ),
                 ),
@@ -476,12 +487,24 @@ class Step2 extends StatefulWidget {
 }
 
 class _Step2State extends State<Step2> {
-  File food_licence,
-      business_licence,
-      pan_card,
-      gst_certificate,
-      blank_cheque,
-      profile_pic;
+  File food_licence;
+  File business_licence;
+  File pan_card;
+  File gst_certificate;
+  File blank_cheque;
+  File profile_pic;
+
+  String foodlicence = "abcd";
+  String businesslicence = "abcd";
+  String pancard = "abcd";
+  String gstcertificate = "abcd";
+  String blankcheque = "abcd";
+  String profilepic = "abcd";
+
+  TextEditingController pannumber = new TextEditingController();
+  TextEditingController gstnumber = new TextEditingController();
+  TextEditingController foodnumber = new TextEditingController();
+  final formKey = GlobalKey<FormState>();
 
   showAlertDialog() {
     Widget okbtn = FlatButton(
@@ -493,7 +516,7 @@ class _Step2State extends State<Step2> {
 
     AlertDialog alert = AlertDialog(
       title: Text("Failed"),
-      content: Text(" Please upload full details"),
+      content: Text("Internal Server error "),
       actions: [okbtn],
     );
 
@@ -504,94 +527,69 @@ class _Step2State extends State<Step2> {
         });
   }
 
-//uploa 2 data .
-  additem() async {
-    final String apiUrl =
-        "https://treato.co.in/api/vendor/add_item/"; //can we call getitem in setstate..?
-
-    Map<String, String> map = {
-      "hotel_uid": widget.hotel_uid.toString(),
-    };
-
-    print(map);
-    var uri = Uri.parse(apiUrl);
-
-    final request = http.MultipartRequest('POST', uri)..fields.addAll(map);
-    // ..files.add(await http.MultipartFile.fromPath(
-    //     'item_image',
-    //     itemimage
-    //         .path)); //this is where you add image filepath ok it mean we are
-
-    var response = await request.send();
-    print("request");
-    print(request);
-
-    final respStr =
-        await response.stream.bytesToString(); //post image parametrs there
-    print(respStr);
-
-    return jsonDecode(respStr);
-  }
-
   uploadstep2() async {
-    if (food_licence != null &&
-        business_licence != null &&
-        pan_card != null &&
-        blank_cheque != null &&
-        profile_pic != null) {
-      final String apiUrl = "https://treato.co.in/api/vendor/registration_s2/";
+    final String apiUrl = "https://treato.co.in/api/vendor/registration_s2/";
 
-      var map = Map<String, String>();
-      map["hotel_uid"] = widget.hotel_uid.toString();
-      // map["food_licence"] = food_licence.toString();
-      // map["business_licence"] = business_licence.toString();
-      // map["pan_card"] = pan_card.toString();
-      // map["gst_certi"] = gst_certificate.toString();
-      // map["blank_cheque"] = blank_cheque.toString();
-      // map["passport_photo"] = profile_pic.toString();
+    var map = Map<String, String>();
 
-      //final response = await http.post(apiUrl, body: map);
+    map["hotel_uid"] = widget.hotel_uid.toString();
+    map["text_pan_card"] = pannumber.text;
+    map["text_gst_no"] = gstnumber.text;
+    map["text_food_licence"] = foodnumber.text;
+    map["food_licence"] = foodlicence;
+    map["pan_card"] = pancard;
+    map["business_licence"] = businesslicence;
+    map["gst_certi"] = gstcertificate;
+    map["blank_cheque"] = blankcheque;
+    map["passport_photo"] = profilepic;
 
-      print(map);
-      var uri = Uri.parse(apiUrl);
+    print("map*************");
+    print(map);
+    //var uri = Uri.parse(apiUrl);
 
-      final request = http.MultipartRequest('POST', uri)
-        ..fields.addAll(map)
-        ..files.add(await http.MultipartFile.fromPath(
-            'food_licence',
-            food_licence
-                .path)) //this is where you add image filepath ok it mean we are
+    //final request = http.MultipartRequest('POST', uri)..fields.addAll(map);
 
-        ..files.add(await http.MultipartFile.fromPath(
-            'business_licence', business_licence.path))
-        ..files
-            .add(await http.MultipartFile.fromPath('pan_card', pan_card.path))
-        ..files.add(await http.MultipartFile.fromPath(
-            'gst_certi', gst_certificate.path))
-        ..files.add(await http.MultipartFile.fromPath(
-            'blank_cheque', blank_cheque.path))
-        ..files.add(await http.MultipartFile.fromPath(
-            'passport_photo', profile_pic.path));
+    final response = await http.post(apiUrl, body: map);
+    print(response.body);
 
-      var response = await request.send();
+    // ..files
+    //     .add(await http.MultipartFile.fromPath('food_licence', foodlicence))
+    // ..files.add(await http.MultipartFile.fromPath(
+    //     'business_licence', businesslicence))
+    // ..files.add(await http.MultipartFile.fromPath('pan_card', pancard))
+    // ..files
+    //     .add(await http.MultipartFile.fromPath('gst_certi', gstcertificate))
+    // ..files
+    //     .add(await http.MultipartFile.fromPath('blank_cheque', blankcheque))
+    // ..files
+    //     .add(await http.MultipartFile.fromPath('passport_photo', profilepic));
+
+    // var response = await request.send();
+    // print("request");
+    // print(request);
+
+    // final respStr =
+    //     await response.stream.bytesToString(); //post image parametrs there
+    //print(respStr);
+
+    //return jsonDecode(respStr);
+
+    print("request");
+
+    print(response.request);
+    print("request");
+
+    print(response.statusCode);
+
+    if (response.statusCode == 200) {
       print("request");
-      print(request);
+      print(widget.hotel_uid.toString());
 
-      final respStr =
-          await response.stream.bytesToString(); //post image parametrs there
-      print(respStr);
-
-      //return jsonDecode(respStr);
-
-      if (response.statusCode == 200) {
-        print(widget.hotel_uid.toString());
-        // print(response.body);
-        Navigator.push(
-            context,
-            MaterialPageRoute(
-                builder: (context) =>
-                    Step3(hotel_uid: widget.hotel_uid.toString())));
-      }
+      Navigator.push(
+          context,
+          MaterialPageRoute(
+              builder: (context) =>
+                  Step3(hotel_uid: widget.hotel_uid.toString())));
     } else {
       print("provides whole things");
       setState(() {
@@ -599,10 +597,18 @@ class _Step2State extends State<Step2> {
       });
       showAlertDialog();
     }
+
+    print("request khtm");
   }
 
   Future<void> getfoodlicence() async {
     var image = await ImagePicker.pickImage(source: ImageSource.gallery);
+
+    cropfoodlicence(image);
+  }
+
+  Future<void> getfoodlicencefromcamera() async {
+    var image = await ImagePicker.pickImage(source: ImageSource.camera);
 
     cropfoodlicence(image);
   }
@@ -614,10 +620,21 @@ class _Step2State extends State<Step2> {
     setState(() {
       food_licence = croppedImage;
     });
+
+    final bytes = await Io.File(food_licence.path).readAsBytes();
+    setState(() {
+      foodlicence = base64Encode(bytes);
+    });
   }
 
   Future<void> getbusinesslicence() async {
     var image = await ImagePicker.pickImage(source: ImageSource.gallery);
+
+    cropbusinesslicence(image);
+  }
+
+  Future<void> getbusinesslicencefromcamera() async {
+    var image = await ImagePicker.pickImage(source: ImageSource.camera);
 
     cropbusinesslicence(image);
   }
@@ -628,11 +645,24 @@ class _Step2State extends State<Step2> {
 
     setState(() {
       business_licence = croppedImage;
+
+      // final bytes = await Io.File(business_licence.path).readAsBytes();
+      // businesslicence = base64Encode(bytes);
+    });
+    final bytes = await Io.File(business_licence.path).readAsBytes();
+    setState(() {
+      businesslicence = base64Encode(bytes);
     });
   }
 
   Future<void> getpancard() async {
     var image = await ImagePicker.pickImage(source: ImageSource.gallery);
+
+    croppancard(image);
+  }
+
+  Future<void> getpancardfromcamera() async {
+    var image = await ImagePicker.pickImage(source: ImageSource.camera);
 
     croppancard(image);
   }
@@ -643,11 +673,25 @@ class _Step2State extends State<Step2> {
 
     setState(() {
       pan_card = croppedImage;
+
+      // final bytes = await Io.File(pan_card.path).readAsBytes();
+      // pancard = base64Encode(bytes);
+    });
+
+    final bytes = await Io.File(pan_card.path).readAsBytes();
+    setState(() {
+      pancard = base64Encode(bytes);
     });
   }
 
   Future<void> getgstcertificate() async {
     var image = await ImagePicker.pickImage(source: ImageSource.gallery);
+
+    cropgstcertificate(image);
+  }
+
+  Future<void> getgstcertificatefromcamera() async {
+    var image = await ImagePicker.pickImage(source: ImageSource.camera);
 
     cropgstcertificate(image);
   }
@@ -658,11 +702,25 @@ class _Step2State extends State<Step2> {
 
     setState(() {
       gst_certificate = croppedImage;
+
+      // final bytes = await Io.File(gst_certificate.path).readAsBytes();
+      // gstcertificate = base64Encode(bytes);
+    });
+
+    final bytes = await Io.File(gst_certificate.path).readAsBytes();
+    setState(() {
+      gstcertificate = base64Encode(bytes);
     });
   }
 
   Future<void> getblankcheque() async {
     var image = await ImagePicker.pickImage(source: ImageSource.gallery);
+
+    cropblankcheque(image);
+  }
+
+  Future<void> getblankchequefromcamera() async {
+    var image = await ImagePicker.pickImage(source: ImageSource.camera);
 
     cropblankcheque(image);
   }
@@ -673,11 +731,24 @@ class _Step2State extends State<Step2> {
 
     setState(() {
       blank_cheque = croppedImage;
+
+      // final bytes = await Io.File(blank_cheque.path).readAsBytes();
+      // blankcheque = base64Encode(bytes);
+    });
+    final bytes = await Io.File(blank_cheque.path).readAsBytes();
+    setState(() {
+      blankcheque = base64Encode(bytes);
     });
   }
 
   Future<void> getprofilepic() async {
     var image = await ImagePicker.pickImage(source: ImageSource.gallery);
+
+    cropprofilepic(image);
+  }
+
+  Future<void> getprofilepicfromcamera() async {
+    var image = await ImagePicker.pickImage(source: ImageSource.camera);
 
     cropprofilepic(image);
   }
@@ -688,24 +759,32 @@ class _Step2State extends State<Step2> {
 
     setState(() {
       profile_pic = croppedImage;
+
+      // final bytes = await Io.File(profile_pic.path).readAsBytes();
+      // profilepic = base64Encode(bytes);
+    });
+
+    final bytes = await Io.File(profile_pic.path).readAsBytes();
+    setState(() {
+      profilepic = base64Encode(bytes);
     });
   }
 
-  step2ok() async {
-    if (formKey.currentState.validate()) {
-      Navigator.push(
-          context,
-          MaterialPageRoute(
-              builder: (context) => Step3(
-                    hotel_uid: widget.hotel_uid,
-                  )));
-    }
-    Navigator.push(
-        context,
-        MaterialPageRoute(
-            builder: (context) => Step3(hotel_uid: widget.hotel_uid)));
-    // uploaduserprofile();
-  }
+  // step2ok() async {
+  //   if (formKey.currentState.validate()) {
+  //     Navigator.push(
+  //         context,
+  //         MaterialPageRoute(
+  //             builder: (context) => Step3(
+  //                   hotel_uid: widget.hotel_uid,
+  //                 )));
+  //   }
+  //   Navigator.push(
+  //       context,
+  //       MaterialPageRoute(
+  //           builder: (context) => Step3(hotel_uid: widget.hotel_uid)));
+  //   // uploaduserprofile();
+  // }
 
   bool com = false;
   @override
@@ -713,8 +792,7 @@ class _Step2State extends State<Step2> {
     Size size = MediaQuery.of(context).size;
     return Scaffold(
       // backgroundColor: Color(0xff203152),
-      appBar: AppBar(
-          title: Text("Registration"), backgroundColor: Color(0xFF8d0101)),
+      appBar: AppBar(title: Text("Registration"), backgroundColor: back),
       body: SingleChildScrollView(
           child: Column(children: [
         Padding(
@@ -729,202 +807,320 @@ class _Step2State extends State<Step2> {
                 ),
               ),
             ])),
+        // Container(
+        //   margin: EdgeInsets.all(10),
+        //   child: Padding(
+        //     padding: const EdgeInsets.all(8.0),
+        //     child: Text(
+        //       "NOTICE :  Upload your Business Details(it's  necessary to upload all documents except Gst Certificate otherwise your acount will not be save)",
+        //       style: TextStyle(color: Colors.black),
+        //     ),
+        //   ),
+        // ),
+        Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Container(
+            decoration: BoxDecoration(
+              boxShadow: [
+                BoxShadow(
+                    color: Colors.grey.withOpacity(0.5),
+                    spreadRadius: 5,
+                    blurRadius: 7,
+                    offset: Offset(0, 3))
+              ],
+            ),
+            height: size.height * 0.3,
+            width: size.width * 1,
+            child: Card(
+              child: food_licence == null
+                  ? Center(
+                      child: Column(
+                      children: [
+                        SizedBox(height: size.height * 0.1),
+                        Text("upload Food Licence"),
+                        SizedBox(height: 20),
+                        GestureDetector(
+                            onTap: () {
+                              getfoodlicence();
+                            },
+                            child: GestureDetector(
+                                child: Icon(Icons.add_a_photo))),
+                        GestureDetector(
+                          onTap: () {
+                            getfoodlicencefromcamera();
+                          },
+                          child: Padding(
+                            padding: const EdgeInsets.only(top: 28.0),
+                            child: Icon(Icons.image),
+                          ),
+                        ),
+                      ],
+                    ))
+                  : Image.file(
+                      food_licence,
+                      fit: BoxFit.fill,
+                    ),
+            ),
+          ),
+        ),
+        SizedBox(height: 10),
         Container(
-          margin: EdgeInsets.all(10),
-          child: Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Text(
-              "NOTICE :  Upload your Business Details(it's  necessary to upload all documents except Gst Certificate otherwise your acount will not be save)",
-              style: TextStyle(color: Colors.black),
-            ),
+          margin: EdgeInsets.symmetric(vertical: 10),
+          padding: EdgeInsets.symmetric(
+            horizontal: 10,
+          ),
+          width: size.width * 0.8,
+          decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(29),
+              boxShadow: [
+                BoxShadow(
+                    color: Colors.grey.withOpacity(0.5),
+                    spreadRadius: 5,
+                    blurRadius: 7,
+                    offset: Offset(0, 3))
+              ]),
+          child: TextField(
+            controller: foodnumber,
+            decoration: InputDecoration(
+                // icon: Icon(Icons.person),
+                hintText: "Food Licence number",
+                border: InputBorder.none),
           ),
         ),
-        GestureDetector(
-          onTap: () {
-            getfoodlicence();
-          },
-          child: Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Container(
-              decoration: BoxDecoration(
-                boxShadow: [
-                  BoxShadow(
-                      color: Colors.grey.withOpacity(0.5),
-                      spreadRadius: 5,
-                      blurRadius: 7,
-                      offset: Offset(0, 3))
-                ],
-              ),
-              height: size.height * 0.3,
-              width: size.width * 1,
-              child: Card(
-                child: food_licence == null
-                    ? Center(
-                        child: Column(
-                        children: [
-                          SizedBox(height: size.height * 0.1),
-                          Text("upload Food Licence"),
-                          SizedBox(height: 20),
-                          Icon(Icons.add_a_photo)
-                        ],
-                      ))
-                    : Image.file(
-                        food_licence,
-                        fit: BoxFit.fill,
-                      ),
-              ),
+        Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Container(
+            height: size.height * 0.3,
+            width: size.width * 1,
+            decoration: BoxDecoration(
+              boxShadow: [
+                BoxShadow(
+                    color: Colors.grey.withOpacity(0.5),
+                    spreadRadius: 5,
+                    blurRadius: 7,
+                    offset: Offset(0, 3))
+              ],
             ),
-          ),
-        ),
-        SizedBox(height: 10),
-        GestureDetector(
-          onTap: () {
-            getbusinesslicence();
-          },
-          child: Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Container(
-              height: size.height * 0.3,
-              width: size.width * 1,
-              decoration: BoxDecoration(
-                boxShadow: [
-                  BoxShadow(
-                      color: Colors.grey.withOpacity(0.5),
-                      spreadRadius: 5,
-                      blurRadius: 7,
-                      offset: Offset(0, 3))
-                ],
-              ),
-              child: Card(
-                child: business_licence == null
-                    ? Center(
-                        child: Column(
-                        children: [
-                          SizedBox(height: size.height * 0.1),
-                          Text("upload Food Business Licence"),
-                          SizedBox(height: 20),
-                          Icon(Icons.add_a_photo)
-                        ],
-                      ))
-                    : Image.file(
-                        business_licence,
-                        fit: BoxFit.fill,
-                      ),
-              ),
+            child: Card(
+              child: business_licence == null
+                  ? Center(
+                      child: Column(
+                      children: [
+                        SizedBox(height: size.height * 0.1),
+                        Text("upload Shopact Licence"),
+                        SizedBox(height: 20),
+                        GestureDetector(
+                            onTap: () {
+                              getbusinesslicence();
+                            },
+                            child: GestureDetector(
+                                child: Icon(Icons.add_a_photo))),
+                        GestureDetector(
+                          onTap: () {
+                            getbusinesslicencefromcamera();
+                          },
+                          child: Padding(
+                            padding: const EdgeInsets.only(top: 28.0),
+                            child: Icon(Icons.image),
+                          ),
+                        ),
+                      ],
+                    ))
+                  : Image.file(
+                      business_licence,
+                      fit: BoxFit.fill,
+                    ),
             ),
           ),
         ),
         SizedBox(height: 10),
-        GestureDetector(
-          onTap: () {
-            getpancard();
-          },
-          child: Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Container(
-              height: size.height * 0.3,
-              width: size.width * 1,
-              decoration: BoxDecoration(
-                boxShadow: [
-                  BoxShadow(
-                      color: Colors.grey.withOpacity(0.5),
-                      spreadRadius: 5,
-                      blurRadius: 7,
-                      offset: Offset(0, 3))
-                ],
-              ),
-              child: Card(
-                child: pan_card == null
-                    ? Center(
-                        child: Column(
-                        children: [
-                          SizedBox(height: size.height * 0.1),
-                          Text("upload Pan Card"),
-                          SizedBox(height: 20),
-                          Icon(Icons.add_a_photo)
-                        ],
-                      ))
-                    : Image.file(
-                        pan_card,
-                        fit: BoxFit.fill,
-                      ),
-              ),
+        Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Container(
+            height: size.height * 0.3,
+            width: size.width * 1,
+            decoration: BoxDecoration(
+              boxShadow: [
+                BoxShadow(
+                    color: Colors.grey.withOpacity(0.5),
+                    spreadRadius: 5,
+                    blurRadius: 7,
+                    offset: Offset(0, 3))
+              ],
+            ),
+            child: Card(
+              child: pan_card == null
+                  ? Center(
+                      child: Column(
+                      children: [
+                        SizedBox(height: size.height * 0.1),
+                        Text("upload Pan Card"),
+                        SizedBox(height: 20),
+                        GestureDetector(
+                            onTap: () {
+                              getpancard();
+                            },
+                            child: GestureDetector(
+                                child: Icon(Icons.add_a_photo))),
+                        GestureDetector(
+                          onTap: () {
+                            getpancardfromcamera();
+                          },
+                          child: Padding(
+                            padding: const EdgeInsets.only(top: 28.0),
+                            child: Icon(Icons.image),
+                          ),
+                        ),
+                      ],
+                    ))
+                  : Image.file(
+                      pan_card,
+                      fit: BoxFit.fill,
+                    ),
             ),
           ),
         ),
         SizedBox(height: 10),
-        GestureDetector(
-          onTap: () {
-            getgstcertificate();
-          },
-          child: Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Container(
-              height: size.height * 0.3,
-              width: size.width * 1,
-              decoration: BoxDecoration(
-                boxShadow: [
-                  BoxShadow(
-                      color: Colors.grey.withOpacity(0.5),
-                      spreadRadius: 5,
-                      blurRadius: 7,
-                      offset: Offset(0, 3))
-                ],
-              ),
-              child: Card(
-                child: gst_certificate == null
-                    ? Center(
-                        child: Column(
-                        children: [
-                          SizedBox(height: size.height * 0.1),
-                          Text("upload Gst Certificate"),
-                          SizedBox(height: 20),
-                          Icon(Icons.add_a_photo)
-                        ],
-                      ))
-                    : Image.file(
-                        gst_certificate,
-                        fit: BoxFit.fill,
-                      ),
-              ),
+        Container(
+          margin: EdgeInsets.symmetric(vertical: 10),
+          padding: EdgeInsets.symmetric(
+            horizontal: 10,
+          ),
+          width: size.width * 0.8,
+          decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(29),
+              boxShadow: [
+                BoxShadow(
+                    color: Colors.grey.withOpacity(0.5),
+                    spreadRadius: 5,
+                    blurRadius: 7,
+                    offset: Offset(0, 3))
+              ]),
+          child: TextField(
+            controller: pannumber,
+            decoration: InputDecoration(
+                // icon: Icon(Icons.person),
+                hintText: "PAN number",
+                border: InputBorder.none),
+          ),
+        ),
+        Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Container(
+            height: size.height * 0.3,
+            width: size.width * 1,
+            decoration: BoxDecoration(
+              boxShadow: [
+                BoxShadow(
+                    color: Colors.grey.withOpacity(0.5),
+                    spreadRadius: 5,
+                    blurRadius: 7,
+                    offset: Offset(0, 3))
+              ],
+            ),
+            child: Card(
+              child: gst_certificate == null
+                  ? Center(
+                      child: Column(
+                      children: [
+                        SizedBox(height: size.height * 0.1),
+                        Text("upload Gst Certificate"),
+                        SizedBox(height: 20),
+                        GestureDetector(
+                            onTap: () {
+                              getgstcertificate();
+                            },
+                            child: GestureDetector(
+                                child: Icon(Icons.add_a_photo))),
+                        GestureDetector(
+                          onTap: () {
+                            getgstcertificatefromcamera();
+                          },
+                          child: Padding(
+                            padding: const EdgeInsets.only(top: 28.0),
+                            child: Icon(Icons.image),
+                          ),
+                        ),
+                      ],
+                    ))
+                  : Image.file(
+                      gst_certificate,
+                      fit: BoxFit.fill,
+                    ),
             ),
           ),
         ),
         SizedBox(height: 10),
-        GestureDetector(
-          onTap: () {
-            getblankcheque();
-          },
-          child: Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Container(
-              height: size.height * 0.3,
-              width: size.width * 1,
-              decoration: BoxDecoration(
-                boxShadow: [
-                  BoxShadow(
-                      color: Colors.grey.withOpacity(0.5),
-                      spreadRadius: 5,
-                      blurRadius: 7,
-                      offset: Offset(0, 3))
-                ],
-              ),
-              child: Card(
-                child: blank_cheque == null
-                    ? Center(
-                        child: Column(
-                        children: [
-                          SizedBox(height: size.height * 0.1),
-                          Text("upload Blank cheque"),
-                          SizedBox(height: 20),
-                          Icon(Icons.add_a_photo)
-                        ],
-                      ))
-                    : Image.file(
-                        blank_cheque,
-                        fit: BoxFit.fill,
-                      ),
-              ),
+        SizedBox(height: 10),
+        Container(
+          margin: EdgeInsets.symmetric(vertical: 10),
+          padding: EdgeInsets.symmetric(
+            horizontal: 10,
+          ),
+          width: size.width * 0.8,
+          decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(29),
+              boxShadow: [
+                BoxShadow(
+                    color: Colors.grey.withOpacity(0.5),
+                    spreadRadius: 5,
+                    blurRadius: 7,
+                    offset: Offset(0, 3))
+              ]),
+          child: TextField(
+            controller: gstnumber,
+            decoration: InputDecoration(
+                // icon: Icon(Icons.person),
+                hintText: "GST number",
+                border: InputBorder.none),
+          ),
+        ),
+        Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Container(
+            height: size.height * 0.3,
+            width: size.width * 1,
+            decoration: BoxDecoration(
+              boxShadow: [
+                BoxShadow(
+                    color: Colors.grey.withOpacity(0.5),
+                    spreadRadius: 5,
+                    blurRadius: 7,
+                    offset: Offset(0, 3))
+              ],
+            ),
+            child: Card(
+              child: blank_cheque == null
+                  ? Center(
+                      child: Column(
+                      children: [
+                        SizedBox(height: size.height * 0.1),
+                        Text("upload Blank cheque"),
+                        SizedBox(height: 20),
+                        GestureDetector(
+                            onTap: () {
+                              getblankcheque();
+                            },
+                            child: GestureDetector(
+                                child: Icon(Icons.add_a_photo))),
+                        GestureDetector(
+                          onTap: () {
+                            getblankchequefromcamera();
+                          },
+                          child: Padding(
+                            padding: const EdgeInsets.only(top: 28.0),
+                            child: Icon(Icons.image),
+                          ),
+                        ),
+                      ],
+                    ))
+                  : Image.file(
+                      blank_cheque,
+                      fit: BoxFit.fill,
+                    ),
             ),
           ),
         ),
@@ -955,7 +1151,21 @@ class _Step2State extends State<Step2> {
                           SizedBox(height: size.height * 0.1),
                           Text("upload Passport photo"),
                           SizedBox(height: 20),
-                          Icon(Icons.add_a_photo)
+                          GestureDetector(
+                              onTap: () {
+                                getprofilepic();
+                              },
+                              child: GestureDetector(
+                                  child: Icon(Icons.add_a_photo))),
+                          GestureDetector(
+                            onTap: () {
+                              getprofilepicfromcamera();
+                            },
+                            child: Padding(
+                              padding: const EdgeInsets.only(top: 28.0),
+                              child: Icon(Icons.image),
+                            ),
+                          ),
                         ],
                       ))
                     : Image.file(
@@ -984,7 +1194,7 @@ class _Step2State extends State<Step2> {
                 padding: const EdgeInsets.all(28.0),
                 child: CircleAvatar(
                   radius: 30,
-                  backgroundColor: Color(0xFF8d0101),
+                  backgroundColor: back,
                   child: Icon(Icons.arrow_forward),
                 ),
               ),
@@ -1015,64 +1225,55 @@ class _Step3State extends State<Step3> {
   bool yesboth = true;
   bool noboth = false;
   String hoteltype;
+  String hotel_icon="abcd", hotel_img1="bdsc", hotel_img2="bdd", hotel_img3="bggffff";
 
   uploadstep3() async {
-    if (hotelicon != null &&
-        hotelimg1 != null &&
-        hotelimg2 != null &&
-        hotelimg3 != null) {
-      final String apiUrl = "https://treato.co.in/api/vendor/registration_s3/";
+    final String apiUrl = "https://treato.co.in/api/vendor/registration_s3/";
 
-      var map = Map<String, String>();
-      map["hotel_uid"] = widget.hotel_uid.toString();
-      // map["hotel_logo"] = hotelicon.toString();
-      // map["slider1"] = hotelimg1.toString();
-      // map["slider2"] = hotelimg2.toString();
-      // map["slider3"] = hotelimg3.toString();
-      map["hotel_type"] = ht;
+    var map = Map<String, String>();
+    map["hotel_uid"] = widget.hotel_uid.toString();
+    map["hotel_logo"] = hotel_icon;
+    map["slider1"] = hotel_img1;
+    map["slider2"] = hotel_img2;
+    map["slider3"] = hotel_img3;
+    map["hotel_type"] = ht;
 
-      // final response = await http.post(apiUrl, body: map);
+    // final response = await http.post(apiUrl, body: map);
 
-      print(map);
-      var uri = Uri.parse(apiUrl);
+    print(map);
 
-      final request = http.MultipartRequest('POST', uri)
-        ..fields.addAll(map)
-        ..files.add(await http.MultipartFile.fromPath(
-            'hotel_logo',
-            hotelicon
-                .path)) //this is where you add image filepath ok it mean we are
+    final response = await http.post(apiUrl, body: map);
+    // var uri = Uri.parse(apiUrl);
 
-        ..files
-            .add(await http.MultipartFile.fromPath('slider1', hotelimg1.path))
-        ..files
-            .add(await http.MultipartFile.fromPath('slider2', hotelimg2.path))
-        ..files
-            .add(await http.MultipartFile.fromPath('slider3', hotelimg3.path));
+    //final request = http.MultipartRequest('POST', uri)..fields.addAll(map);
+    // ..files.add(await http.MultipartFile.fromPath(
+    //     'hotel_logo',
+    //     hotelicon
+    //         .path)) //this is where you add image filepath ok it mean we are
 
-      var response = await request.send();
-      print("request");
-      print(request);
+    // ..files
+    //     .add(await http.MultipartFile.fromPath('slider1', hotelimg1.path))
+    // ..files
+    //     .add(await http.MultipartFile.fromPath('slider2', hotelimg2.path))
+    // ..files
+    //     .add(await http.MultipartFile.fromPath('slider3', hotelimg3.path));
 
-      final respStr =
-          await response.stream.bytesToString(); //post image parametrs there
-      print(respStr);
+    //var response = await request.send();
+    print("request");
+    // print(request);
 
-      if (response.statusCode == 200) {
-        print(widget.hotel_uid.toString());
-        //print(response.body);
-        Navigator.push(
-            context,
-            MaterialPageRoute(
-                builder: (context) =>
-                    Step4(hotel_uid: widget.hotel_uid.toString())));
-      }
-    } else {
-      print("provides whole things");
-      setState(() {
-        com = false;
-      });
-      showAlertDialog();
+    // final respStr =
+    //     await response.stream.bytesToString(); //post image parametrs there
+    //print(respStr);
+
+    if (response.statusCode == 200) {
+      print(widget.hotel_uid.toString());
+      //print(response.body);
+      Navigator.push(
+          context,
+          MaterialPageRoute(
+              builder: (context) =>
+                  Step4(hotel_uid: widget.hotel_uid.toString())));
     }
   }
 
@@ -1103,6 +1304,12 @@ class _Step3State extends State<Step3> {
     crophotelicon(image);
   }
 
+  Future<void> gethoteliconfromcamera() async {
+    var image = await ImagePicker.pickImage(source: ImageSource.camera);
+
+    crophotelicon(image);
+  }
+
   crophotelicon(File image) async {
     File croppedImage = await ImageCropper.cropImage(
         sourcePath: image.path, compressQuality: 40);
@@ -1110,10 +1317,21 @@ class _Step3State extends State<Step3> {
     setState(() {
       hotelicon = croppedImage;
     });
+
+    final bytes = await Io.File(hotelicon.path).readAsBytes();
+    setState(() {
+      hotel_icon = base64Encode(bytes);
+    });
   }
 
   Future<void> getimg1() async {
     var image = await ImagePicker.pickImage(source: ImageSource.gallery);
+
+    cropimg1(image);
+  }
+
+  Future<void> getimg1fromcamera() async {
+    var image = await ImagePicker.pickImage(source: ImageSource.camera);
 
     cropimg1(image);
   }
@@ -1125,10 +1343,21 @@ class _Step3State extends State<Step3> {
     setState(() {
       hotelimg1 = croppedImage;
     });
+
+    final bytes = await Io.File(hotelimg1.path).readAsBytes();
+    setState(() {
+      hotel_img1 = base64Encode(bytes);
+    });
   }
 
   Future<void> getimg2() async {
     var image = await ImagePicker.pickImage(source: ImageSource.gallery);
+
+    cropimg2(image);
+  }
+
+  Future<void> getimg2fromcamera() async {
+    var image = await ImagePicker.pickImage(source: ImageSource.camera);
 
     cropimg2(image);
   }
@@ -1140,10 +1369,21 @@ class _Step3State extends State<Step3> {
     setState(() {
       hotelimg2 = croppedImage;
     });
+
+    final bytes = await Io.File(hotelimg2.path).readAsBytes();
+    setState(() {
+      hotel_img2 = base64Encode(bytes);
+    });
   }
 
   Future<void> getimg3() async {
     var image = await ImagePicker.pickImage(source: ImageSource.gallery);
+
+    cropimg3(image);
+  }
+
+  Future<void> getimg3fromcamera() async {
+    var image = await ImagePicker.pickImage(source: ImageSource.camera);
 
     cropimg3(image);
   }
@@ -1154,6 +1394,11 @@ class _Step3State extends State<Step3> {
 
     setState(() {
       hotelimg3 = croppedImage;
+    });
+
+    final bytes = await Io.File(hotelimg3.path).readAsBytes();
+    setState(() {
+      hotel_img3 = base64Encode(bytes);
     });
   }
 
@@ -1185,7 +1430,7 @@ class _Step3State extends State<Step3> {
       //backgroundColor: Color(0xff203152),
       appBar: AppBar(
         title: Text("Registration"),
-        backgroundColor: Color(0xFF8d0101),
+        backgroundColor: back,
       ),
       body: SingleChildScrollView(
           child: Column(children: [
@@ -1199,161 +1444,197 @@ class _Step3State extends State<Step3> {
                 ),
               ),
             ])),
+        // Padding(
+        //   padding: const EdgeInsets.all(8.0),
+        //   child: Text(
+        //     "NOTE   :  Upload your Hotel Details  (it's Necessary to upload all documents otherwise your Account is not consider)",
+        //     style: TextStyle(color: Colors.black),
+        //   ),
+        // ),
         Padding(
           padding: const EdgeInsets.all(8.0),
-          child: Text(
-            "NOTE   :  Upload your Hotel Details  (it's Necessary to upload all documents otherwise your Account is not consider)",
-            style: TextStyle(color: Colors.black),
-          ),
-        ),
-        GestureDetector(
-          onTap: () {
-            gethotelicon();
-          },
-          child: Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Container(
-              height: size.height * 0.3,
-              width: size.width * 1,
-              decoration: BoxDecoration(
-                boxShadow: [
-                  BoxShadow(
-                      color: Colors.grey.withOpacity(0.5),
-                      spreadRadius: 5,
-                      blurRadius: 7,
-                      offset: Offset(0, 3))
-                ],
-              ),
-              child: Card(
-                child: hotelicon == null
-                    ? Center(
-                        child: Column(
-                        children: [
-                          SizedBox(height: size.height * 0.1),
-                          Text("upload hotel logo"),
-                          SizedBox(height: 20),
-                          Icon(Icons.add_a_photo)
-                        ],
-                      ))
-                    : Image.file(
-                        hotelicon,
-                        fit: BoxFit.fill,
-                      ),
-              ),
+          child: Container(
+            height: size.height * 0.3,
+            width: size.width * 1,
+            decoration: BoxDecoration(
+              boxShadow: [
+                BoxShadow(
+                    color: Colors.grey.withOpacity(0.5),
+                    spreadRadius: 5,
+                    blurRadius: 7,
+                    offset: Offset(0, 3))
+              ],
+            ),
+            child: Card(
+              child: hotelicon == null
+                  ? Center(
+                      child: Column(
+                      children: [
+                        SizedBox(height: size.height * 0.1),
+                        Text("upload hotel logo"),
+                        SizedBox(height: 20),
+                        GestureDetector(
+                            onTap: () {
+                              gethotelicon();
+                            },
+                            child: GestureDetector(
+                                child: Icon(Icons.add_a_photo))),
+                        GestureDetector(
+                          onTap: () {
+                            gethoteliconfromcamera();
+                          },
+                          child: Padding(
+                            padding: const EdgeInsets.only(top: 28.0),
+                            child: Icon(Icons.image),
+                          ),
+                        ),
+                      ],
+                    ))
+                  : Image.file(
+                      hotelicon,
+                      fit: BoxFit.fill,
+                    ),
             ),
           ),
         ),
         SizedBox(height: 10),
-        GestureDetector(
-          onTap: () {
-            getimg1();
-          },
-          child: Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Container(
-              height: size.height * 0.3,
-              width: size.width * 1,
-              decoration: BoxDecoration(
-                boxShadow: [
-                  BoxShadow(
-                      color: Colors.grey.withOpacity(0.5),
-                      spreadRadius: 5,
-                      blurRadius: 7,
-                      offset: Offset(0, 3))
-                ],
-              ),
-              child: Card(
-                child: hotelimg1 == null
-                    ? Center(
-                        child: Column(
-                        children: [
-                          SizedBox(height: size.height * 0.1),
-                          Text("upload 1st Slider Image"),
-                          SizedBox(height: 20),
-                          Icon(Icons.add_a_photo)
-                        ],
-                      ))
-                    : Image.file(
-                        hotelimg1,
-                        fit: BoxFit.fill,
-                      ),
-              ),
+        Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Container(
+            height: size.height * 0.3,
+            width: size.width * 1,
+            decoration: BoxDecoration(
+              boxShadow: [
+                BoxShadow(
+                    color: Colors.grey.withOpacity(0.5),
+                    spreadRadius: 5,
+                    blurRadius: 7,
+                    offset: Offset(0, 3))
+              ],
+            ),
+            child: Card(
+              child: hotelimg1 == null
+                  ? Center(
+                      child: Column(
+                      children: [
+                        SizedBox(height: size.height * 0.1),
+                        Text("upload 1st Slider Image"),
+                        SizedBox(height: 20),
+                        GestureDetector(
+                            onTap: () {
+                              getimg1();
+                            },
+                            child: GestureDetector(
+                                child: Icon(Icons.add_a_photo))),
+                        GestureDetector(
+                          onTap: () {
+                            getimg1fromcamera();
+                          },
+                          child: Padding(
+                            padding: const EdgeInsets.only(top: 28.0),
+                            child: Icon(Icons.image),
+                          ),
+                        ),
+                      ],
+                    ))
+                  : Image.file(
+                      hotelimg1,
+                      fit: BoxFit.fill,
+                    ),
             ),
           ),
         ),
         SizedBox(height: 10),
-        GestureDetector(
-          onTap: () {
-            getimg2();
-          },
-          child: Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Container(
-              height: size.height * 0.3,
-              width: size.width * 1,
-              decoration: BoxDecoration(
-                boxShadow: [
-                  BoxShadow(
-                      color: Colors.grey.withOpacity(0.5),
-                      spreadRadius: 5,
-                      blurRadius: 7,
-                      offset: Offset(0, 3))
-                ],
-              ),
-              child: Card(
-                child: hotelimg2 == null
-                    ? Center(
-                        child: Column(
-                        children: [
-                          SizedBox(height: size.height * 0.1),
-                          Text("upload 2nd Slider image"),
-                          SizedBox(height: 20),
-                          Icon(Icons.add_a_photo)
-                        ],
-                      ))
-                    : Image.file(
-                        hotelimg2,
-                        fit: BoxFit.fill,
-                      ),
-              ),
+        Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Container(
+            height: size.height * 0.3,
+            width: size.width * 1,
+            decoration: BoxDecoration(
+              boxShadow: [
+                BoxShadow(
+                    color: Colors.grey.withOpacity(0.5),
+                    spreadRadius: 5,
+                    blurRadius: 7,
+                    offset: Offset(0, 3))
+              ],
+            ),
+            child: Card(
+              child: hotelimg2 == null
+                  ? Center(
+                      child: Column(
+                      children: [
+                        SizedBox(height: size.height * 0.1),
+                        Text("upload 2nd Slider image"),
+                        SizedBox(height: 20),
+                        GestureDetector(
+                            onTap: () {
+                              getimg2();
+                            },
+                            child: GestureDetector(
+                                child: Icon(Icons.add_a_photo))),
+                        GestureDetector(
+                          onTap: () {
+                            getimg2fromcamera();
+                          },
+                          child: Padding(
+                            padding: const EdgeInsets.only(top: 28.0),
+                            child: Icon(Icons.image),
+                          ),
+                        ),
+                      ],
+                    ))
+                  : Image.file(
+                      hotelimg2,
+                      fit: BoxFit.fill,
+                    ),
             ),
           ),
         ),
         SizedBox(height: 10),
-        GestureDetector(
-          onTap: () {
-            getimg3();
-          },
-          child: Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Container(
-              height: size.height * 0.3,
-              width: size.width * 1,
-              decoration: BoxDecoration(
-                boxShadow: [
-                  BoxShadow(
-                      color: Colors.grey.withOpacity(0.5),
-                      spreadRadius: 5,
-                      blurRadius: 7,
-                      offset: Offset(0, 3))
-                ],
-              ),
-              child: Card(
-                child: hotelimg3 == null
-                    ? Center(
-                        child: Column(
-                        children: [
-                          SizedBox(height: size.height * 0.1),
-                          Text("upload 3rd Slider image"),
-                          SizedBox(height: 20),
-                          Icon(Icons.add_a_photo)
-                        ],
-                      ))
-                    : Image.file(
-                        hotelimg3,
-                        fit: BoxFit.fill,
-                      ),
-              ),
+        Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Container(
+            height: size.height * 0.3,
+            width: size.width * 1,
+            decoration: BoxDecoration(
+              boxShadow: [
+                BoxShadow(
+                    color: Colors.grey.withOpacity(0.5),
+                    spreadRadius: 5,
+                    blurRadius: 7,
+                    offset: Offset(0, 3))
+              ],
+            ),
+            child: Card(
+              child: hotelimg3 == null
+                  ? Center(
+                      child: Column(
+                      children: [
+                        SizedBox(height: size.height * 0.1),
+                        Text("upload 3rd Slider image"),
+                        SizedBox(height: 20),
+                        GestureDetector(
+                            onTap: () {
+                              getimg3();
+                            },
+                            child: GestureDetector(
+                                child: Icon(Icons.add_a_photo))),
+                        GestureDetector(
+                          onTap: () {
+                            getimg3fromcamera();
+                          },
+                          child: Padding(
+                            padding: const EdgeInsets.only(top: 28.0),
+                            child: Icon(Icons.image),
+                          ),
+                        ),
+                      ],
+                    ))
+                  : Image.file(
+                      hotelimg3,
+                      fit: BoxFit.fill,
+                    ),
             ),
           ),
         ),
@@ -1366,7 +1647,7 @@ class _Step3State extends State<Step3> {
               " Hotel Type ",
               style: TextStyle(
                 fontSize: 25,
-                color: Color(0xFF8d0101),
+                color: back,
               ),
             ),
           ),
@@ -1447,7 +1728,7 @@ class _Step3State extends State<Step3> {
               padding: const EdgeInsets.all(28.0),
               child: CircleAvatar(
                 radius: 30,
-                backgroundColor: Color(0xFF8d0101),
+                backgroundColor: back,
                 child: Icon(Icons.arrow_forward),
               ),
             ),

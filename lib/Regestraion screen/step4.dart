@@ -3,8 +3,10 @@ import 'dart:convert';
 import "package:flutter/material.dart";
 
 import "package:http/http.dart" as http;
+import 'package:loginui/Regestraion%20screen/payment.dart';
 import 'package:loginui/Regestraion%20screen/step5.dart';
 import "package:flutter_time_picker_spinner/flutter_time_picker_spinner.dart";
+import 'package:loginui/constant.dart';
 
 // final formKey = GlobalKey<FormState>();
 
@@ -337,7 +339,7 @@ class _Step4State extends State<Step4> {
       //  backgroundColor: Color(0xff203152),
       appBar: AppBar(
         title: Text("Registration"),
-        backgroundColor: Color(0xFF8d0101),
+        backgroundColor: back,
       ),
       body: SingleChildScrollView(
         child: Container(
@@ -359,7 +361,7 @@ class _Step4State extends State<Step4> {
                       style: TextStyle(
                           // color: Color(0xFFFF0000),
                           fontSize: 20,
-                          color: Color(0xFF8d0101)),
+                          color: back),
                     )),
               ),
               Align(
@@ -748,7 +750,7 @@ class _Step4State extends State<Step4> {
                 child: Padding(
                     padding: const EdgeInsets.all(18.0),
                     child: CircleAvatar(
-                      backgroundColor: Color(0xFF8d0101),
+                      backgroundColor: back,
                       radius: 25,
                       child: Icon(Icons.arrow_forward),
                     )),

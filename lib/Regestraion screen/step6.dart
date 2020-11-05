@@ -3,6 +3,7 @@ import 'dart:convert';
 import "package:flutter/material.dart";
 import "package:http/http.dart" as http;
 import 'package:loginui/Regestraion%20screen/step7.dart';
+import 'package:loginui/constant.dart';
 
 GlobalKey catkey = GlobalKey();
 
@@ -50,6 +51,9 @@ class _Step6State extends State<Step6> {
 
   addcategory() async {
     final String apiUrl = "https://treato.co.in/api/vendor/category/";
+
+    print(widget.hotel_uid);
+    print(category.text);
 
     var map = Map<String, dynamic>();
     map["hotel_uid"] = widget.hotel_uid;
@@ -105,7 +109,7 @@ class _Step6State extends State<Step6> {
             "Registration",
             style: TextStyle(color: Colors.white),
           ),
-          backgroundColor: Color(0xFF8d0101)),
+          backgroundColor: back),
       body: SingleChildScrollView(
         child: Container(
             width: size.width * 1,
@@ -125,7 +129,7 @@ class _Step6State extends State<Step6> {
                 child: Text("(ADD NEW CATEGORY)",
                     style: TextStyle(
                         fontSize: 20,
-                        color: Color(0xFF8d0101),
+                        color: back,
                         fontWeight: FontWeight.bold)),
               ),
 
@@ -143,7 +147,7 @@ class _Step6State extends State<Step6> {
               Padding(
                 padding: const EdgeInsets.all(20.0),
                 child: RaisedButton(
-                  color: Color(0xFF8d0101),
+                  color: back,
                   onPressed: () {
                     if (category.text.length > 1) {
                       print("null hi");
@@ -186,7 +190,7 @@ class _Step6State extends State<Step6> {
                   child: Align(
                       alignment: Alignment.centerRight,
                       child: CircleAvatar(
-                        backgroundColor: Color(0xFF8d0101),
+                        backgroundColor: back,
                         radius: 25,
                         child: Icon(Icons.arrow_forward),
                       )),
@@ -253,7 +257,7 @@ class _Step6State extends State<Step6> {
                                 Text(
                                   all_item[index]["category_name"],
                                   style: TextStyle(
-                                      color: Color(0xFF8d0101),
+                                      color: back,
                                       fontSize: 20,
                                       fontWeight: FontWeight.bold),
                                 )

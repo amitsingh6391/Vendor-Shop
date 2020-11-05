@@ -3,6 +3,7 @@ import 'dart:convert';
 import "package:flutter/material.dart";
 
 import "package:http/http.dart" as http;
+import 'package:loginui/constant.dart';
 import 'package:loginui/models/allordermodal.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -115,7 +116,7 @@ class _OrderdetailsState extends State<Orderdetails> {
     return Scaffold(
       appBar: AppBar(
         title: Text(" All Order Details"),
-        backgroundColor: Color(0xFF8d0101),
+        backgroundColor: back,
       ),
       body: Container(
         child: Column(
@@ -401,7 +402,7 @@ class _PendigndetailsState extends State<Pendigndetails> {
     return Scaffold(
       appBar: AppBar(
         title: Text("Pending Order Details"),
-        backgroundColor: Color(0xFF8d0101),
+        backgroundColor: back,
       ),
       body: Container(
         child: Column(
