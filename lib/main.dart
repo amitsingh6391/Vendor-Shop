@@ -107,8 +107,9 @@ class _SplashscreenState extends State<Splashscreen> {
         width: MediaQuery.of(context).size.width,
         child: Center(
           child: CircleAvatar(
+            backgroundColor: back,
             backgroundImage: AssetImage("images/appicon.png"),
-            radius: size.width * .4,
+            radius: size.width * .3,
           ),
         ),
       ),
@@ -911,7 +912,8 @@ class _ProfilePageState extends State<ProfilePage> {
                                     Row(children: [
                                       SizedBox(width: size.width * 0.28),
                                       CircleAvatar(
-                                        radius: size.width * 0.15,
+                                        backgroundColor: Colors.white,
+                                        radius: size.width * 0.14,
                                         backgroundImage:
                                             AssetImage("images/appicon.png"),
                                       ),

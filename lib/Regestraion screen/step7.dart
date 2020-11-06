@@ -226,41 +226,53 @@ class _Step7State extends State<Step7> {
                           ),
                         ),
                         SizedBox(height: 10),
-                        GestureDetector(
-                          onTap: () {
-                            getitemimg();
-                          },
-                          child: Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: Container(
-                              decoration: BoxDecoration(
-                                color: Colors.white,
-                                boxShadow: [
-                                  BoxShadow(
-                                      color: Colors.grey.withOpacity(0.5),
-                                      spreadRadius: 5,
-                                      blurRadius: 7,
-                                      offset: Offset(0, 3))
-                                ],
-                              ),
-                              child: itemimage == null
-                                  ? Padding(
-                                      padding: const EdgeInsets.all(20.0),
-                                      child: Center(
-                                          child: Column(
-                                        children: [
-                                          SizedBox(height: size.height * 0.07),
-                                          Text("upload item image"),
-                                          SizedBox(height: 20),
-                                          Icon(Icons.add_a_photo)
-                                        ],
-                                      )),
-                                    )
-                                  : Image.file(
-                                      itemimage,
-                                      fit: BoxFit.fill,
-                                    ),
+                        Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Container(
+                            decoration: BoxDecoration(
+                              color: Colors.white,
+                              boxShadow: [
+                                BoxShadow(
+                                    color: Colors.grey.withOpacity(0.5),
+                                    spreadRadius: 5,
+                                    blurRadius: 7,
+                                    offset: Offset(0, 3))
+                              ],
                             ),
+                            child: itemimage == null
+                                ? Padding(
+                                    padding: const EdgeInsets.all(20.0),
+                                    child: Center(
+                                        child: Column(
+                                      children: [
+                                        SizedBox(height: size.height * 0.07),
+                                        Text("upload item image"),
+                                        SizedBox(height: 20),
+                                        // Icon(Icons.add_a_photo)
+                                        GestureDetector(
+                                            onTap: () {
+                                              getitemimgfromcamera();
+                                            },
+                                            child: GestureDetector(
+                                                child:
+                                                    Icon(Icons.add_a_photo))),
+                                        GestureDetector(
+                                          onTap: () {
+                                            getitemimg();
+                                          },
+                                          child: Padding(
+                                            padding: const EdgeInsets.only(
+                                                top: 28.0),
+                                            child: Icon(Icons.image),
+                                          ),
+                                        ),
+                                      ],
+                                    )),
+                                  )
+                                : Image.file(
+                                    itemimage,
+                                    fit: BoxFit.fill,
+                                  ),
                           ),
                         ),
                         SizedBox(

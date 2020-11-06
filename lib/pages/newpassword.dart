@@ -105,7 +105,8 @@ class _NewPasswordState extends State<NewPassword> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(backgroundColor: back,
+        appBar: AppBar(
+          backgroundColor: back,
           leading: Text(""),
           actions: [],
         ),
@@ -115,6 +116,7 @@ class _NewPasswordState extends State<NewPassword> {
               padding: const EdgeInsets.only(top: 28.0),
               child: Container(
                 child: CircleAvatar(
+                  backgroundColor: Colors.white,
                   radius: 100,
                   backgroundImage: AssetImage("images/appicon.png"),
                 ),

@@ -54,7 +54,7 @@ class _AddressState extends State<Address> {
   final addresskey = GlobalKey<FormState>();
 
   addressmatch(BuildContext context) async {
-    if (addresskey.currentState.validate()) {
+    if (addresskey.currentState.validate() && x != null) {
       String apiUrl = "https://treato.co.in/api/vendor/registration_s6/";
 
       var map = Map<String, dynamic>();
@@ -95,21 +95,22 @@ class _AddressState extends State<Address> {
       setState(() {
         com = false;
       });
+       showempty(context);
     }
   }
 
   showempty(BuildContext context) {
     Widget okbtn = FlatButton(
-      child: Text("Retry"),
+      child: Text("Try - again"),
       onPressed: () {
-        Navigator.push(
-            context, MaterialPageRoute(builder: (context) => Homepage()));
+        Navigator.pop(
+            context);
       },
     );
 
     AlertDialog alert = AlertDialog(
       title: Text("Failed"),
-      content: Text("Mobile number not register"),
+      content: Text("Please Fill Each Field"),
       actions: [okbtn],
     );
 
@@ -199,10 +200,10 @@ class _AddressState extends State<Address> {
                 child: TextFormField(
                   keyboardType: TextInputType.number,
                   validator: (val) {
-                    return val.length > 4 ? null : "Enter Valid pin number";
+                    return val.length == 6 ? null : "Enter Valid pin number";
                   },
                   controller: pincode,
-                  maxLength: 6,
+                  
                   decoration: InputDecoration(
                       icon: Icon(Icons.pin_drop),
                       hintText: "Pincode",

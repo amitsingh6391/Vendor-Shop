@@ -115,12 +115,34 @@ class _OtpVerificationState extends State<OtpVerification> {
           com = false;
         });
         print("wrong");
+        showservererror();
       }
     } else {
       setState(() {
         com = false;
       });
     }
+  }
+
+  showservererror() {
+    Widget okbtn = FlatButton(
+      child: Text("Retry"),
+      onPressed: () {
+        Navigator.pop(context);
+      },
+    );
+
+    AlertDialog alert = AlertDialog(
+      title: Text("Failed"),
+      content: Text("Internal Server error "),
+      actions: [okbtn],
+    );
+
+    showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return alert;
+        });
   }
 
   resendotp(BuildContext context) async {
@@ -158,6 +180,7 @@ class _OtpVerificationState extends State<OtpVerification> {
                         Padding(
                           padding: const EdgeInsets.all(10.0),
                           child: CircleAvatar(
+                            backgroundColor: Colors.white,
                             backgroundImage: AssetImage("images/appicon.png"),
                             radius: 80,
                           ),

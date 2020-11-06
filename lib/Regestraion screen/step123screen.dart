@@ -841,13 +841,14 @@ class _Step2State extends State<Step2> {
                         SizedBox(height: 20),
                         GestureDetector(
                             onTap: () {
-                              getfoodlicence();
+                              getfoodlicencefromcamera();
                             },
                             child: GestureDetector(
                                 child: Icon(Icons.add_a_photo))),
                         GestureDetector(
                           onTap: () {
-                            getfoodlicencefromcamera();
+                            getfoodlicence();
+                            
                           },
                           child: Padding(
                             padding: const EdgeInsets.only(top: 28.0),
@@ -912,13 +913,14 @@ class _Step2State extends State<Step2> {
                         SizedBox(height: 20),
                         GestureDetector(
                             onTap: () {
-                              getbusinesslicence();
+                              getbusinesslicencefromcamera();
                             },
                             child: GestureDetector(
                                 child: Icon(Icons.add_a_photo))),
                         GestureDetector(
                           onTap: () {
-                            getbusinesslicencefromcamera();
+                            getbusinesslicence();
+                            
                           },
                           child: Padding(
                             padding: const EdgeInsets.only(top: 28.0),
@@ -959,13 +961,14 @@ class _Step2State extends State<Step2> {
                         SizedBox(height: 20),
                         GestureDetector(
                             onTap: () {
-                              getpancard();
+                              getpancardfromcamera();
                             },
                             child: GestureDetector(
                                 child: Icon(Icons.add_a_photo))),
                         GestureDetector(
                           onTap: () {
-                            getpancardfromcamera();
+                             getpancard();
+                           
                           },
                           child: Padding(
                             padding: const EdgeInsets.only(top: 28.0),
@@ -1030,13 +1033,14 @@ class _Step2State extends State<Step2> {
                         SizedBox(height: 20),
                         GestureDetector(
                             onTap: () {
-                              getgstcertificate();
+                             getgstcertificatefromcamera();
                             },
                             child: GestureDetector(
                                 child: Icon(Icons.add_a_photo))),
                         GestureDetector(
                           onTap: () {
-                            getgstcertificatefromcamera();
+                             getgstcertificate();
+                            
                           },
                           child: Padding(
                             padding: const EdgeInsets.only(top: 28.0),
@@ -1102,13 +1106,14 @@ class _Step2State extends State<Step2> {
                         SizedBox(height: 20),
                         GestureDetector(
                             onTap: () {
-                              getblankcheque();
+                              getblankchequefromcamera();
                             },
                             child: GestureDetector(
                                 child: Icon(Icons.add_a_photo))),
                         GestureDetector(
                           onTap: () {
-                            getblankchequefromcamera();
+                             getblankcheque();
+                           
                           },
                           child: Padding(
                             padding: const EdgeInsets.only(top: 28.0),
@@ -1125,11 +1130,7 @@ class _Step2State extends State<Step2> {
           ),
         ),
         SizedBox(height: 10),
-        GestureDetector(
-          onTap: () {
-            getprofilepic();
-          },
-          child: Padding(
+         Padding(
             padding: const EdgeInsets.all(8.0),
             child: Container(
               height: size.height * 0.3,
@@ -1153,13 +1154,14 @@ class _Step2State extends State<Step2> {
                           SizedBox(height: 20),
                           GestureDetector(
                               onTap: () {
-                                getprofilepic();
+                               getprofilepicfromcamera();
                               },
                               child: GestureDetector(
                                   child: Icon(Icons.add_a_photo))),
                           GestureDetector(
                             onTap: () {
-                              getprofilepicfromcamera();
+                               getprofilepic();
+                              
                             },
                             child: Padding(
                               padding: const EdgeInsets.only(top: 28.0),
@@ -1175,7 +1177,7 @@ class _Step2State extends State<Step2> {
               ),
             ),
           ),
-        ),
+        
         SizedBox(height: 30),
         com ? CircularProgressIndicator() : Text(""),
         GestureDetector(
@@ -1444,13 +1446,7 @@ class _Step3State extends State<Step3> {
                 ),
               ),
             ])),
-        // Padding(
-        //   padding: const EdgeInsets.all(8.0),
-        //   child: Text(
-        //     "NOTE   :  Upload your Hotel Details  (it's Necessary to upload all documents otherwise your Account is not consider)",
-        //     style: TextStyle(color: Colors.black),
-        //   ),
-        // ),
+       
         Padding(
           padding: const EdgeInsets.all(8.0),
           child: Container(
@@ -1475,13 +1471,15 @@ class _Step3State extends State<Step3> {
                         SizedBox(height: 20),
                         GestureDetector(
                             onTap: () {
-                              gethotelicon();
+                               gethoteliconfromcamera();
+                             
                             },
                             child: GestureDetector(
                                 child: Icon(Icons.add_a_photo))),
                         GestureDetector(
                           onTap: () {
-                            gethoteliconfromcamera();
+                             gethotelicon();
+                           
                           },
                           child: Padding(
                             padding: const EdgeInsets.only(top: 28.0),
@@ -1522,13 +1520,14 @@ class _Step3State extends State<Step3> {
                         SizedBox(height: 20),
                         GestureDetector(
                             onTap: () {
-                              getimg1();
+                               getimg1fromcamera();
                             },
                             child: GestureDetector(
                                 child: Icon(Icons.add_a_photo))),
                         GestureDetector(
                           onTap: () {
-                            getimg1fromcamera();
+                             getimg1();
+                          
                           },
                           child: Padding(
                             padding: const EdgeInsets.only(top: 28.0),
@@ -1569,13 +1568,14 @@ class _Step3State extends State<Step3> {
                         SizedBox(height: 20),
                         GestureDetector(
                             onTap: () {
-                              getimg2();
+                              getimg2fromcamera();
                             },
                             child: GestureDetector(
                                 child: Icon(Icons.add_a_photo))),
                         GestureDetector(
                           onTap: () {
-                            getimg2fromcamera();
+                             getimg2();
+                           
                           },
                           child: Padding(
                             padding: const EdgeInsets.only(top: 28.0),
@@ -1616,13 +1616,14 @@ class _Step3State extends State<Step3> {
                         SizedBox(height: 20),
                         GestureDetector(
                             onTap: () {
-                              getimg3();
+                              getimg3fromcamera();
                             },
                             child: GestureDetector(
                                 child: Icon(Icons.add_a_photo))),
                         GestureDetector(
                           onTap: () {
-                            getimg3fromcamera();
+                             getimg3();
+                           
                           },
                           child: Padding(
                             padding: const EdgeInsets.only(top: 28.0),

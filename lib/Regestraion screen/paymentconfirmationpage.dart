@@ -50,6 +50,7 @@ class Paymentconfirm extends StatelessWidget {
               child: Center(
                   child: CircleAvatar(
                 radius: 100,
+                backgroundColor: Colors.white,
                 backgroundImage: AssetImage("images/appicon.png"),
               )),
             ),

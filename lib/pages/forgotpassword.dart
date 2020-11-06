@@ -109,7 +109,9 @@ class _ForgotpasswordState extends State<Forgotpassword> {
               padding: const EdgeInsets.only(top: 28.0),
               child: Container(
                 //alignment: Alignment.bottomdown,
+
                 child: CircleAvatar(
+                  backgroundColor: Colors.white,
                   radius: 100,
                   backgroundImage: AssetImage("images/appicon.png"),
                 ),
@@ -225,6 +227,7 @@ class _NewotpmatchState extends State<Newotpmatch> {
               padding: const EdgeInsets.only(top: 28.0),
               child: Container(
                 child: CircleAvatar(
+                  backgroundColor: Colors.white,
                   radius: 100,
                   backgroundImage: AssetImage("images/appicon.png"),
                 ),
