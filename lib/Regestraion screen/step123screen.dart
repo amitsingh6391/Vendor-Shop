@@ -414,37 +414,37 @@ class _Step1State extends State<Step1> {
                                 border: InputBorder.none),
                           ),
                         ),
-                        Container(
-                          margin: EdgeInsets.symmetric(vertical: 5),
-                          padding: EdgeInsets.symmetric(
-                            horizontal: 10,
-                          ),
-                          width: size.width * 0.8,
-                          decoration: BoxDecoration(
-                            color: Colors.white,
-                            borderRadius: BorderRadius.circular(29),
-                            boxShadow: [
-                              BoxShadow(
-                                  color: Colors.grey.withOpacity(0.5),
-                                  spreadRadius: 5,
-                                  blurRadius: 7,
-                                  offset: Offset(0, 3))
-                            ],
-                          ),
-                          child: TextFormField(
-                            keyboardType: TextInputType.number,
-                            validator: (val) {
-                              return val.length == 10 || val.length == 11
-                                  ? null
-                                  : "Enter Correct hotel Phone number";
-                            },
-                            controller: hotelphonenumber,
-                            decoration: InputDecoration(
-                                icon: Icon(Icons.phone_android),
-                                hintText: "Hotel phone no.",
-                                border: InputBorder.none),
-                          ),
-                        ),
+                        // Container(
+                        //   margin: EdgeInsets.symmetric(vertical: 5),
+                        //   padding: EdgeInsets.symmetric(
+                        //     horizontal: 10,
+                        //   ),
+                        //   width: size.width * 0.8,
+                        //   decoration: BoxDecoration(
+                        //     color: Colors.white,
+                        //     borderRadius: BorderRadius.circular(29),
+                        //     boxShadow: [
+                        //       BoxShadow(
+                        //           color: Colors.grey.withOpacity(0.5),
+                        //           spreadRadius: 5,
+                        //           blurRadius: 7,
+                        //           offset: Offset(0, 3))
+                        //     ],
+                        //   ),
+                        //   child: TextFormField(
+                        //     keyboardType: TextInputType.number,
+                        //     validator: (val) {
+                        //       return val.length == 10 || val.length == 11
+                        //           ? null
+                        //           : "Enter Correct hotel Phone number";
+                        //     },
+                        //     controller: hotelphonenumber,
+                        //     decoration: InputDecoration(
+                        //         icon: Icon(Icons.phone_android),
+                        //         hintText: "Hotel phone no.",
+                        //         border: InputBorder.none),
+                        //   ),
+                        // ),
                       ],
                     ),
                   ),

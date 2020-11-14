@@ -34,6 +34,9 @@ class _PaymentState extends State<Payment> {
   int bakery = 1499;
   int dairy = 999;
   int meat = 999;
+  int catters = 1999;
+  int tea_stall = 499;
+
 
   Razorpay razorpay;
   // TextEditingController coinEditingController = new TextEditingController();
@@ -43,6 +46,8 @@ class _PaymentState extends State<Payment> {
   String trans_id;
   var paymentemail, paymentnumber;
   List<String> state = [
+    "Catters",
+    "Tea Stall",
     "Hotel",
     "Restaurants",
     "Chinese Restaurant",
@@ -56,7 +61,7 @@ class _PaymentState extends State<Payment> {
     "Juice and Shakes",
     "IceCream Parlour",
     "Bakery",
-    "Dairy Products",
+    "Dairy",
     "Meat Store",
   ];
 
@@ -264,6 +269,18 @@ class _PaymentState extends State<Payment> {
         price = 1999;
       });
     }
+     if (plan == "Catters") {
+      // price = 1999;
+      setState(() {
+        price = 1999;
+      });
+    }
+     if (plan == "Tea Stall") {
+      // price = 1999;
+      setState(() {
+        price = 499;
+      });
+    }
     if (plan == "Restaurants") {
       //price = 1999;
       setState(() {
@@ -332,7 +349,7 @@ class _PaymentState extends State<Payment> {
         price = 1499;
       });
     }
-    if (plan == "Dairy Products") {
+    if (plan == "Dairy") {
       // price = 999;
       setState(() {
         price = 999;

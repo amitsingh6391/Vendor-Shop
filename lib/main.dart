@@ -1,7 +1,7 @@
 import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
-
+import "package:loginui/pages/updatepassword.dart";
 import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -26,11 +26,11 @@ import 'dart:io';
 import "package:flutter_offline/flutter_offline.dart";
 import 'package:connectivity/connectivity.dart';
 import 'package:url_launcher/url_launcher.dart';
+import "package:loginui/pages/updateprofile.dart";
 
 bool connected;
 
-// final formKey = GlobalKey<FormState>();
-// final loginformKey = GlobalKey<FormState>();
+
 
 String hotel_uid;
 
@@ -131,6 +131,7 @@ class _HomepageState extends State<Homepage> {
 
   bool com = false;
   final loginformKey = GlobalKey<FormState>();
+  bool ishiden = true;
 
   Future createUser(var loginnumber, var loginpassword) async {
     if (loginformKey.currentState.validate()) {
@@ -364,7 +365,7 @@ class _HomepageState extends State<Homepage> {
                                     //  SizedBox(width: 10),
                                     Expanded(
                                       child: TextFormField(
-                                        obscureText: true,
+                                        obscureText: ishiden?true:false,
                                         controller: loginpassword,
                                         decoration: InputDecoration(
                                             hintText:
@@ -383,7 +384,22 @@ class _HomepageState extends State<Homepage> {
                                         },
                                       ),
                                     ),
-                                  ]),
+                                    GestureDetector(
+                                      onTap:(){
+                                        setState((){
+                                          ishiden=false;
+                                        });
+                                      },
+                                      onDoubleTap:(){
+                                        setState((){
+                                          ishiden=true;
+                                        });
+                                      },
+                                      
+                                      
+                                      child: Icon(Icons.remove_red_eye),
+                                    ),
+                                ]),
                                 ),
 
                                 com ? CircularProgressIndicator() : Text(""),
@@ -780,7 +796,7 @@ class _ProfilePageState extends State<ProfilePage> {
       vendortype,
       hotelname,
       hotelmobile,
-      hotelphone,
+      vendorid,
       hotelmail,
       hotelid,
       hotollogo;
@@ -794,11 +810,17 @@ class _ProfilePageState extends State<ProfilePage> {
       vendortype = preferences.getString('vendor_type');
       vendorname = preferences.getString('vendor_name');
       hotelmobile = preferences.getString('hotel_mobile');
-      hotelphone = preferences.getString('hotel_phone');
+      vendorid = preferences.getString('vendor_uid');
       hotelmail = preferences.getString('hotel_email');
       hotollogo = preferences.getString("hotel_logo");
       hotelname = preferences.getString("hotel_name");
       hotelid = preferences.getString("hotel_uid");
+
+      vendorid = vendorid.substring(vendorid.length-4);
+
+      print(vendorid.substring(vendorid.length-4));
+
+      print("**********$vendorid");
     });
   }
 
@@ -1078,12 +1100,12 @@ class _ProfilePageState extends State<ProfilePage> {
                                     backgroundColor: back,
                                     radius: 25,
                                     child:
-                                        Icon(Icons.phone, color: Colors.white)),
+                                        Icon(Icons.circle, color: Colors.white)),
                               ),
                               SizedBox(width: size.width * 0.05),
                               Padding(
                                 padding: const EdgeInsets.all(8.0),
-                                child: Text("hotel phone: $hotelphone",
+                                child: Text("Vendor id: $vendorid",
                                     style: TextStyle(
                                       fontSize: 15,
                                       //  fontWeight: FontWeight.bold
@@ -1140,6 +1162,68 @@ class _ProfilePageState extends State<ProfilePage> {
                                 Padding(
                                   padding: const EdgeInsets.all(8.0),
                                   child: Text("LOGOUT",
+                                      style: TextStyle(
+                                        fontSize: 15,
+                                        // fontWeight: FontWeight.bold
+                                      )),
+                                )
+                              ],
+                            ),
+                          ),
+
+
+                           GestureDetector(
+                            onTap: () async {
+                              // contact();
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) =>Updateprofile()));
+                            },
+                            child: Row(
+                              children: [
+                                Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: CircleAvatar(
+                                      backgroundColor: back,
+                                      radius: 25,
+                                      child: Icon(Icons.edit,
+                                          color: Colors.white)),
+                                ),
+                                SizedBox(width: size.width * 0.05),
+                                Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: Text("Update Profile",
+                                      style: TextStyle(
+                                        fontSize: 15,
+                                        // fontWeight: FontWeight.bold
+                                      )),
+                                )
+                              ],
+                            ),
+                          ),
+                           GestureDetector(
+                            onTap: () async {
+                              // contact();
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) =>UpdatePassword()));
+                            },
+                            child: Row(
+                              children: [
+                                Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: CircleAvatar(
+                                      backgroundColor: back,
+                                      radius: 25,
+                                      child: Icon(Icons.update,
+                                          color: Colors.white)),
+                                ),
+                                SizedBox(width: size.width * 0.05),
+                                Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: Text("Update Password",
                                       style: TextStyle(
                                         fontSize: 15,
                                         // fontWeight: FontWeight.bold
